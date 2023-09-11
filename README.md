@@ -1,15 +1,20 @@
 # Nest.js Laboratorios
 
-Proyectos de ejemplo y explicaciones de algunos coceptos de Nest.js
+Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
 
 [![Nest](https://img.shields.io/badge/Code-Nest.js-red)](https://kotlinlang.org/)
 ![GitHub](https://img.shields.io/github/last-commit/joseluisgs/nestjs-laboratorios)
 [![LICENSE](https://img.shields.io/badge/Lisence-CC-%23e64545)](https://joseluisgs.github.io/docs/license/)
+
 ![imagen](https://cdn.icon-icons.com/icons2/2699/PNG/512/nestjs_logo_icon_169927.png)
 
 - [Nest.js Laboratorios](#nestjs-laboratorios)
   - [Acerca de](#acerca-de)
   - [Estructura de de un proyecto Nest.js](#estructura-de-de-un-proyecto-nestjs)
+    - [Decoradores](#decoradores)
+    - [Controller](#controller)
+    - [Providers](#providers)
+    - [Module](#module)
   - [Autor](#autor)
     - [Contacto](#contacto)
   - [Licencia de uso](#licencia-de-uso)
@@ -22,6 +27,44 @@ Ejemplos de uso de Nest.js, un framework de Node.js para crear aplicaciones esca
 ## Estructura de de un proyecto Nest.js
 
 Un proyecto de Nest.js nos podemos encontrar:
+
+### Decoradores
+Los decoradores en Nest.js son expanden la funcionalidad de el método, propiedad o clase a la cual se adjuntan. Nest.js busca aplicar el principio DRY fuertemente con decoradores.
+Ej: @Controller(‘usuarios’), @Ip(), @CustomDecorator()
+
+### Controller
+Los controladores son los encargados de recibir las peticiones HTTP y devolver una respuesta. Los controladores son clases decoradas con @Controller() y que contienen métodos decorados con @Get(), @Post(), @Put(), @Delete(), @Patch(), @Options(), @Head(), @All().
+
+```ts
+@Controller('usuarios')
+export class UsuariosController {
+  @Get()
+  getUsuarios() {
+    return 'Todos los usuarios';
+  }
+}
+```
+### Providers
+Los servicios, repositorios son Porviders son clases que contienen la lógica de negocio de nuestra aplicación. Los servicios son clases decoradas con @Injectable() y que pueden ser inyectadas en los controladores, módulos u otros servicios. Por lo tanto alojan la lógica de negocio de tal manera que sea reutilizable mediante inyección de dependencias.
+
+```ts
+@Injectable()
+export class UsuariosService {
+  getUsuarios() {
+    return 'Todos los usuarios';
+  }
+}
+```
+
+### Module
+Los módulos son clases que contienen los controladores y servicios que se van a utilizar en nuestra aplicación. Los módulos son clases decoradas con @Module() y que pueden ser inyectadas en otros módulos. Agrupan y desacoplan un conjunto de funcionalidad específica por dominio.
+
+```ts
+@Module({
+  imports: [], // import de otros modulos para usarlos
+  controllers: [UsuariosController], // controllers que contiene
+  providers: [UsuariosService], // providers que contiene
+})
 
 
 ## Autor
