@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { Module } from '@nestjs/common'
+import { AppService } from './app.service'
+import { ProductsController } from './products/products.controller'
 
 // Módulo principal de la aplicación
 // Se usa el decorador @Module() para definir el módulo
@@ -9,7 +9,10 @@ import { AppService } from './app.service';
 // De esta manera se hace la inyección de dependencias
 @Module({
   imports: [],
-  controllers: [AppController],
+  controllers: [
+    // AppController,
+    ProductsController,
+  ],
   providers: [AppService],
 })
 export class AppModule {}

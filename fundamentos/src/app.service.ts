@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common'
 
 // Provider de la clase AppService
 // Se usa el decorador @Injectable() para definir el provider
@@ -7,6 +7,6 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class AppService {
   getHello(): string {
-    return 'Hello World!';
+    return 'Hello World!'
   }
 }

@@ -13,6 +13,9 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
   - [Estructura de de un proyecto Nest.js](#estructura-de-de-un-proyecto-nestjs)
     - [Decoradores](#decoradores)
     - [Controller](#controller)
+      - [CRUD operations](#crud-operations)
+      - [Obtener información del Request](#obtener-información-del-request)
+      - [Validaciones de Pipe](#validaciones-de-pipe)
     - [Providers](#providers)
     - [Module](#module)
   - [Autor](#autor)
@@ -33,7 +36,12 @@ Los decoradores en Nest.js son expanden la funcionalidad de el método, propieda
 Ej: @Controller(‘usuarios’), @Ip(), @CustomDecorator()
 
 ### Controller
-Los controladores son los encargados de recibir las peticiones HTTP y devolver una respuesta. Los controladores son clases decoradas con @Controller() y que contienen métodos decorados con @Get(), @Post(), @Put(), @Delete(), @Patch(), @Options(), @Head(), @All().
+Los controladores son los encargados de recibir las peticiones HTTP y devolver una respuesta. Los controladores son clases decoradas con @Controller() y que contienen métodos decorados con @Get(), @Post(), @Put(), @Delete(), @Patch(), @Options(), @Head(), @All().S
+
+Se crea con el comando de nest
+```bash
+nest g controller usuarios
+```
 
 ```ts
 @Controller('usuarios')
@@ -44,6 +52,64 @@ export class UsuariosController {
   }
 }
 ```
+#### CRUD operations
+```ts
+@Controller('usuarios')
+export class UsuariosController {
+  @Get(@Query('nombre') nombre: string)
+  getUsuarios() {
+    return 'Todos los usuarios';
+  }
+
+  @Get('usuarios')
+  getUsuariosFiltradoPorNombre(@Query('nombre') nombre: string) {
+    return `Todos los usuarios con nombre: ${nombre}`;
+  }
+
+  @Get(':id')
+  getUsuario(@Param('id') id: string) {
+    return `Usuario con id: ${id}`;
+  }
+
+  @Post()
+  createUsuario(@Body() usuario: any) {
+    return usuario;
+  }
+
+  @Put(':id')
+  updateUsuario(@Param('id') id: string, @Body() usuario: any) {
+    return `Usuario con id: ${id} actualizado`;
+  }
+
+  @Delete(':id')
+  deleteUsuario(@Param('id') id: string) {
+    return `Usuario con id: ${id} eliminado`;
+  }
+}
+```
+
+#### Obtener información del Request
+- Obtener parámetros / segmentos: @Param('id')
+- Obtener el body de la petición: @Body()
+- Obtener los parámetros de query: @Query()
+- Obtener respose (Express/Fastify)/Importarse desde express/fastify: @Res()
+
+#### Validaciones de Pipe
+- ValidationPipe
+- ParseIntPipe
+- ParseBoolPipe 
+- ParseArrayPipe
+- ParseFloatPipe
+- ParseUUIDPipe
+
+Por ejemplo cómo forzar que el id sea un número al hacer un get
+```ts
+@Get(':id')
+  getUsuario(@Param('id', ParseIntPipe) id: number) {
+    return `Usuario con id: ${id}`;
+  }
+```
+
 ### Providers
 Los servicios, repositorios son Porviders son clases que contienen la lógica de negocio de nuestra aplicación. Los servicios son clases decoradas con @Injectable() y que pueden ser inyectadas en los controladores, módulos u otros servicios. Por lo tanto alojan la lógica de negocio de tal manera que sea reutilizable mediante inyección de dependencias.
 
