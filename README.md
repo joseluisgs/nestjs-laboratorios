@@ -131,6 +131,7 @@ Los módulos son clases que contienen los controladores y servicios que se van a
   controllers: [UsuariosController], // controllers que contiene
   providers: [UsuariosService], // providers que contiene
 })
+```
 
 
 ## Autor
