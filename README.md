@@ -40,7 +40,7 @@ Los controladores son los encargados de recibir las peticiones HTTP y devolver u
 
 Se crea con el comando de nest
 ```bash
-nest g controller usuarios
+nest g co mod mo usuarios
 ```
 
 ```ts
@@ -95,6 +95,14 @@ export class UsuariosController {
 - Obtener el body de la petición: @Body(), si queremos recoger un objeto que noe ste completo podemos usar `@Body() product:Partial<Product>`,
 - Obtener los parámetros de query: @Query()
 - Obtener respose (Express/Fastify)/Importarse desde express/fastify: @Res()
+- Obtener todo con @Req(): El decorador @Req nos permite acceder a todos los datos de una petición a traves del objeto req (param, query, etc). Si hiciéramos la petición http://localhost:3000/api/v1/books?order=1&limit=10, request.query contendría lo siguiente: `{ order: '1', limit: '10' }`
+
+```ts
+@Get()
+findAll(@Req() request: Request) { 
+  return this.booksService.findAll(request.query); 
+}
+```
 
 #### Validaciones de Pipe
 - ValidationPipe
@@ -119,7 +127,7 @@ De hecho, lo que hacemos con ellos es liberar al controlador de toda la lógica,
 
 Por ejemplo un servicio se crea con:
 ```bash
-nest g service usuarios
+nest g s usuarios
 ```
 
 ```ts
@@ -132,15 +140,25 @@ export class UsuariosService {
 ```
 
 ### Module
-Los módulos son clases que contienen los controladores y servicios que se van a utilizar en nuestra aplicación. Los módulos son clases decoradas con @Module() y que pueden ser inyectadas en otros módulos. Agrupan y desacoplan un conjunto de funcionalidad específica por dominio.
+Los módulos son clases que contienen los controladores y servicios que se van a utilizar en nuestra aplicación. Los módulos son clases decoradas con @Module() y que pueden ser inyectadas en otros módulos. Agrupan y desacoplan un conjunto de funcionalidad específica por dominio. Gracias a ellos podemos hacer el IoC (Sistema de Inversión de Control).
+
+El módulo principal para la aplicación es: AppModule
+
+Se crea en nest con el comando de nest:
+```bash
+nest g mo usuarios
+```
 
 ```ts
 @Module({
   imports: [], // import de otros modulos para usarlos
   controllers: [UsuariosController], // controllers que contiene
   providers: [UsuariosService], // providers que contiene
+  exports: [UsuariosService], // Exportamos el servicio para poder usarlo en otros módulos
 })
 ```
+
+Podemos crear todos los módulos para separar la funcionalidad, e importarlos en el principal (imports) o desde otros, para así separar la lógica de la aplicación por funcionalidad o casos de uso.
 
 
 ## Autor
