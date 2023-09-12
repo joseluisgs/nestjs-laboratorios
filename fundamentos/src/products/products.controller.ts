@@ -11,19 +11,23 @@ import {
   Query,
 } from '@nestjs/common'
 import { Product } from './products.model'
+import { ProductsService } from './products.service'
 
 /*
   Controlador de Productos
  */
 @Controller('products')
 export class ProductsController {
+  // Constructor de la clase
+  constructor(private readonly productService: ProductsService) {}
+
   // Obtenemos todos los productos
   @Get()
   getAllProducts(@Query('name') name: string) {
     if (name) {
-      return `Get All Products with name ${name}`
+      return this.productService.getAllProductsFilterByName(name)
     }
-    return 'Get All Products'
+    return this.productService.getAllProducts()
   }
 
   // usando un filter por nombre
@@ -35,13 +39,13 @@ export class ProductsController {
   // Obtenemos un producto por su id (ParseIntPipe para parsear el id a number)
   @Get(':id')
   getProductById(@Param('id', ParseIntPipe) id: number) {
-    return `Get Product with id ${id}`
+    return this.productService.getProductById(id)
   }
 
   // Crear un producto
   @Post()
   createProduct(@Body() product: Product) {
-    return `Create Product ${product.id} with ${product} and ${product.amount}`
+    return this.productService.createProduct(product)
   }
 
   // Actualizar un producto en base a su id
@@ -50,7 +54,7 @@ export class ProductsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() product: Product,
   ) {
-    return `Update Product with id ${id} with ${product.name} and ${product.amount}`
+    return this.productService.updateProduct(id, product)
   }
 
   // Actualizar parcialmente un producto en base a su id
@@ -59,12 +63,12 @@ export class ProductsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() product: Partial<Product>,
   ) {
-    return `Patch Product with id ${id} with ${product.name} and ${product.amount}`
+    return this.productService.updatePartialProduct(id, product)
   }
 
-  // Eliminar un producto en base a su id
+  // Eliminar un producto con base a su id
   @Delete(':id')
   deleteProduct(@Param('id', ParseIntPipe) id: number) {
-    return `Delete Product with id ${id}`
+    return this.productService.deleteProduct(id)
   }
 }

@@ -81,6 +81,8 @@ export class UsuariosController {
     return `Usuario con id: ${id} actualizado`;
   }
 
+  @Patch(':id')
+
   @Delete(':id')
   deleteUsuario(@Param('id') id: string) {
     return `Usuario con id: ${id} eliminado`;
@@ -90,13 +92,13 @@ export class UsuariosController {
 
 #### Obtener información del Request
 - Obtener parámetros / segmentos: @Param('id')
-- Obtener el body de la petición: @Body()
+- Obtener el body de la petición: @Body(), si queremos recoger un objeto que noe ste completo podemos usar `@Body() product:Partial<Product>`,
 - Obtener los parámetros de query: @Query()
 - Obtener respose (Express/Fastify)/Importarse desde express/fastify: @Res()
 
 #### Validaciones de Pipe
 - ValidationPipe
-- ParseIntPipe
+- ParseIntPipe: Convierte a entero
 - ParseBoolPipe 
 - ParseArrayPipe
 - ParseFloatPipe
@@ -111,7 +113,14 @@ Por ejemplo cómo forzar que el id sea un número al hacer un get
 ```
 
 ### Providers
-Los servicios, repositorios son Porviders son clases que contienen la lógica de negocio de nuestra aplicación. Los servicios son clases decoradas con @Injectable() y que pueden ser inyectadas en los controladores, módulos u otros servicios. Por lo tanto alojan la lógica de negocio de tal manera que sea reutilizable mediante inyección de dependencias.
+Los servicios, repositorios son Providers son clases que contienen la lógica de negocio de nuestra aplicación. Los servicios son clases decoradas con @Injectable() y que pueden ser inyectadas en los controladores, módulos u otros servicios. Por lo tanto alojan la lógica de negocio de tal manera que sea reutilizable mediante inyección de dependencias.
+
+De hecho, lo que hacemos con ellos es liberar al controlador de toda la lógica, pues el controlador se encarga de recibir la petición y devolver una respuesta, y la lógica de negocio se la delega al servicio o repositorios (principios de responsabilidad única).
+
+Por ejemplo un servicio se crea con:
+```bash
+nest g service usuarios
+```
 
 ```ts
 @Injectable()

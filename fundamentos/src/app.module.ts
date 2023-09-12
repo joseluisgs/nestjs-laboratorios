@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
-import { AppService } from './app.service'
 import { ProductsController } from './products/products.controller'
+import { ProductsService } from './products/products.service'
 
 // Módulo principal de la aplicación
 // Se usa el decorador @Module() para definir el módulo
@@ -13,6 +13,9 @@ import { ProductsController } from './products/products.controller'
     // AppController,
     ProductsController,
   ],
-  providers: [AppService],
+  providers: [
+    //AppService,
+    ProductsService,
+  ],
 })
 export class AppModule {}
