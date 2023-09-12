@@ -18,6 +18,7 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
       - [Validaciones de Pipe](#validaciones-de-pipe)
     - [Providers](#providers)
     - [Module](#module)
+  - [Generador de CRUDS](#generador-de-cruds)
   - [Autor](#autor)
     - [Contacto](#contacto)
   - [Licencia de uso](#licencia-de-uso)
@@ -158,7 +159,15 @@ nest g mo usuarios
 })
 ```
 
-Podemos crear todos los módulos para separar la funcionalidad, e importarlos en el principal (imports) o desde otros, para así separar la lógica de la aplicación por funcionalidad o casos de uso.
+Podemos crear todos los módulos para separar la funcionalidad, e importarlos en el principal (imports) o desde otros, para así separar la lógica de la aplicación por funcionalidad o casos de uso. OJO cuidado si usamos un servicio en otro módulo, porque debemos exportarlo.
+
+## Generador de CRUDS
+Muchas veces lo que hacemos es generar CRUDS completos, Nest tiene el comando para hacerlo, creando toda la estructura necesaria:
+```bash
+nest g res usuarios
+```
+
+Podemos elegir entre distintos servicios (REST, GraphQL, Websockets, ...) y si queremos todo el esqueleto o solo parte.
 
 
 ## Autor
