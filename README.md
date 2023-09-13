@@ -10,6 +10,7 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
 
 - [Nest.js Laboratorios](#nestjs-laboratorios)
   - [Acerca de](#acerca-de)
+  - [Creando una aplicación](#creando-una-aplicación)
   - [Estructura de de un proyecto Nest.js](#estructura-de-de-un-proyecto-nestjs)
     - [Decoradores](#decoradores)
     - [Controller](#controller)
@@ -19,6 +20,7 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
     - [Providers](#providers)
     - [Module](#module)
   - [Generador de CRUDS](#generador-de-cruds)
+    - [Middlewares](#middlewares)
   - [Autor](#autor)
     - [Contacto](#contacto)
   - [Licencia de uso](#licencia-de-uso)
@@ -27,6 +29,12 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
 ## Acerca de
 
 Ejemplos de uso de Nest.js, un framework de Node.js para crear aplicaciones escalables y robustas.
+
+## Creando una aplicación
+Puedes hacerlo con el comando:
+```bash
+nest g application 
+```
 
 ## Estructura de de un proyecto Nest.js
 
@@ -97,6 +105,7 @@ export class UsuariosController {
 - Obtener los parámetros de query: @Query()
 - Obtener respose (Express/Fastify)/Importarse desde express/fastify: @Res()
 - Obtener todo con @Req(): El decorador @Req nos permite acceder a todos los datos de una petición a traves del objeto req (param, query, etc). Si hiciéramos la petición http://localhost:3000/api/v1/books?order=1&limit=10, request.query contendría lo siguiente: `{ order: '1', limit: '10' }`
+- Para actualizar solo un objeto parcial podemos usar `@Body() product:Partial<Product>`. O definir la Entidad como `export class UpdateProductDto extends PartialType(ProductDto) {}`
 
 ```ts
 @Get()
@@ -169,6 +178,52 @@ nest g res usuarios
 
 Podemos elegir entre distintos servicios (REST, GraphQL, Websockets, ...) y si queremos todo el esqueleto o solo parte.
 
+### Middlewares
+Un middleware es una función que se ejecuta antes de que se ejecute el controlador. Se pueden usar para comprobar si el usuario está autenticado, si tiene permisos, pre-validar bodies, etc. Es decir, cuando nos llega una petición, antes de entregarla al controlador, se ejecuta el middleware para ver si se puede ejecutar o no. 
+
+Puedes crearlo con la orden:
+```bash
+nest g mi auth
+```
+```ts
+// Clase de Middlware donde procesa las peticiones y respuestas
+// Importante importarlos de Express: Request, Response, NextFunction
+@Injectable()
+export class ValidatorMiddleware implements NestMiddleware {
+  use(req: Request, res: Response, next: NextFunction) {
+    const user: User = req.body
+    if (!user.name || !user.surname) {
+      res.status(400).json({ error: 'name and surname are required' })
+      return
+    }
+    next()
+  }
+}
+```
+Importante, luego lo debes usar en el módulo donde quieras que se aplique, por ejemplo en el Módulo de usuarios o el general de AppModule
+
+```ts
+// Para el middleware
+export class AppModule implements NestModule {
+  // Le indicamos que el middleware ValidatorMiddleware se aplicará a todas las rutas que empiecen por users
+  // Ademas ademas podemos por metodos, por ejemplo post y put o patch
+  // También podemos excluirlas, por ejemplo, excluimos el metodo get
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(ValidatorMiddleware)
+      .exclude(
+        { path: 'users', method: RequestMethod.GET },
+        { path: 'users', method: RequestMethod.GET },
+        { path: 'users', method: RequestMethod.DELETE },
+      )
+      .forRoutes(
+        { path: 'users', method: RequestMethod.POST },
+        { path: 'users/(*)', method: RequestMethod.PUT },
+        { path: 'users/(*)', method: RequestMethod.PATCH },
+      )
+  }
+}
+```
 
 ## Autor
 
