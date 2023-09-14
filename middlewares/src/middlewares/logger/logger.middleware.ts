@@ -1,10 +1,8 @@
-import { NextFunction, Request, Response } from 'express'
+import {NextFunction, Request, Response} from 'express'
 
-export function loggerMiddleware(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  console.log(`endpoint called from ${req.baseUrl}`)
-  next()
+export function loggerMiddleware(req: Request, res: Response, next: NextFunction) {
+    console.log(
+        `Endpoint called to: ${req.baseUrl}${req.url}, with method: ${req.method}, with body: ${req.body}`,
+    );
+    next();
 }
