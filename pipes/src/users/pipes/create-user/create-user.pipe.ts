@@ -4,7 +4,7 @@ import {
   Injectable,
   PipeTransform,
 } from '@nestjs/common'
-import { CreateUserDto } from '../../../../users/dto/create-user.dto'
+import { CreateUserDto } from '../../dto/create-user.dto'
 import { ObjectSchema } from 'joi' // Se debe instalar con npm i joi
 
 @Injectable()

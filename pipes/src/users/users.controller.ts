@@ -12,9 +12,9 @@ import {
 import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
-import { CustomPipe } from '../pipes/custom/custom/custom.pipe'
-import { CreateUserPipe } from '../pipes/custom/users/create-user/create-user.pipe'
-import { CreateUserSchema } from '../pipes/custom/users/create-user/create-user.schema'
+import { CustomPipe } from '../pipes/custom/custom.pipe'
+import { CreateUserPipe } from './pipes/create-user/create-user.pipe'
+import { CreateUserSchema } from './pipes/create-user/create-user.schema'
 
 @Controller('users')
 export class UsersController {
