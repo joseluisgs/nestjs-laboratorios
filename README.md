@@ -21,6 +21,7 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
     - [Module](#module)
   - [Generador de CRUDS](#generador-de-cruds)
     - [Middlewares](#middlewares)
+  - [Excepciones](#excepciones)
   - [Autor](#autor)
     - [Contacto](#contacto)
   - [Licencia de uso](#licencia-de-uso)
@@ -224,6 +225,75 @@ export class AppModule implements NestModule {
   }
 }
 ```
+
+## Excepciones
+Las excepciones nos serrán para devolver código de estado y mensajes ante operaciones que no se han realizado correctamente.
+Podemos usar en servicios los objetos `HttpException` o algunos más personalizados como `BadRequestException`, `NotFoundException`, `ConflictException`, `ForbiddenException`, `UnauthorizedException`, `NotAcceptableException`, `RequestTimeoutException`, `InternalServerErrorException`, `NotImplementedException`, `BadGatewayException`, `ServiceUnavailableException`, `GatewayTimeoutException`.
+
+```ts
+@Get(':id')
+  getUsuario(@Param('id', ParseIntPipe) id: number) {
+    if (id === 1) {
+      throw new NotFoundException(`Usuario con id: ${id} no encontrado`);
+      // throw new HttpException(`Usuario con id: ${id} no encontrado`, HttpStatus.NOT_FOUND);
+    }
+    return `Usuario con id: ${id}`;
+  }
+```
+
+Podemos usar un filtro para capturar las excepciones, con @Catch que implementa ExeptionFilter
+```ts
+@Catch(HttpException)
+export class GeneralExceptionFilter implements ExceptionFilter {
+  catch(exception: HttpException, host: ArgumentsHost) {
+    // Generamos el contexto de la petición
+    const ctx = host.switchToHttp()
+    const response = ctx.getResponse<Response>()
+    const request = ctx.getRequest<Request>()
+
+    const status = exception.getStatus()
+    const exceptionResponse = exception.getResponse()
+
+    response.status(status).json({
+      statusCode: status,
+      timestamp: new Date().toISOString(),
+      path: request.url,
+      message:
+        exceptionResponse['message'] ||
+        exceptionResponse['error'] ||
+        exceptionResponse['statusCode'],
+    })
+  }
+}
+```
+
+Para usarla la podemos usar en el módulo o en el controlador con @UseFilters en un método del controlador, para todo el controlador o app (para todos) antes de lanzar el servidor. Todo depende de donde pongas la anotacion @UseFilters
+
+```ts
+@Controller('users')
+@UseFilters(new GeneralExceptionFilter())
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
+
+  @Post()
+  @UseFilters(new GeneralExceptionFilter())
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.create(createUserDto);
+  }
+
+```
+
+```ts
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  // app.useGlobalFilters(new GeneralExceptionFilter());
+  await app.listen(3000);
+}
+bootstrap();
+```
+
+
+
 
 ## Autor
 

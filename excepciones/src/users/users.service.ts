@@ -5,7 +5,10 @@ import { UpdateUserDto } from './dto/update-user.dto'
 @Injectable()
 export class UsersService {
   create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user'
+    throw new HttpException(
+      { error: 'metodo no implementado', status: HttpStatus.NOT_IMPLEMENTED },
+      HttpStatus.NOT_IMPLEMENTED,
+    )
   }
 
   findAll() {
