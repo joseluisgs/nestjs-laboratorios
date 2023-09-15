@@ -16,12 +16,13 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
     - [Controller](#controller)
       - [CRUD operations](#crud-operations)
       - [Obtener información del Request](#obtener-información-del-request)
-      - [Validaciones de Pipe](#validaciones-de-pipe)
     - [Providers](#providers)
     - [Module](#module)
   - [Generador de CRUDS](#generador-de-cruds)
     - [Middlewares](#middlewares)
   - [Excepciones](#excepciones)
+  - [Pipes](#pipes)
+      - [Validaciones de Pipe](#validaciones-de-pipe)
   - [Autor](#autor)
     - [Contacto](#contacto)
   - [Licencia de uso](#licencia-de-uso)
@@ -114,14 +115,6 @@ findAll(@Req() request: Request) {
   return this.booksService.findAll(request.query); 
 }
 ```
-
-#### Validaciones de Pipe
-- ValidationPipe
-- ParseIntPipe: Convierte a entero
-- ParseBoolPipe 
-- ParseArrayPipe
-- ParseFloatPipe
-- ParseUUIDPipe
 
 Por ejemplo cómo forzar que el id sea un número al hacer un get
 ```ts
@@ -291,6 +284,17 @@ async function bootstrap() {
 }
 bootstrap();
 ```
+
+## Pipes
+Los pipes en Nest.js se usan verificar aspectos concretos de una ruta para validarlos antes de que pasen al controlador. Puede ser como un middleware pero específico para una ruta. Por ejemplo, podemos usarlo para validar que un id sea un número, que un email sea un email, etc.
+
+#### Validaciones de Pipe
+- ValidationPipe
+- ParseIntPipe: Si es entero
+- ParseBoolPipe: Si es booleano
+- ParseArrayPipe: Si es un array
+- ParseFloatPipe: si es un float
+- ParseUUIDPipe: si es un uuid.
 
 
 
