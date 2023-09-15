@@ -329,6 +329,41 @@ export class CustomPipe implements PipeTransform<string, number> {
   }
 ```
 
+Usando joi podemos validar los datos de un un cuerpo completo en el controlador con restricciones específicas
+````ts
+import * as Joi from 'joi' // Se debe instalar con npm i joi
+export const CreateUserSchema: Joi.ObjectSchema = Joi.object().keys({
+  name: Joi.string().required(),
+  address: Joi.string(),
+  age: Joi.number().min(10).max(80).required(),
+})
+````
+
+```ts
+@Injectable()
+export class CreateUserPipe
+  implements PipeTransform<CreateUserDto, CreateUserDto>
+{
+  constructor(private schema: ObjectSchema) {}
+
+  transform(createSchema: CreateUserDto, metadata: ArgumentMetadata) {
+    const { error } = this.schema.validate(createSchema) // Se valida el schema
+    if (error) {
+      throw new BadRequestException(error.message) // Si hay error se lanza una excepción
+    }
+    return createSchema // Si no hay error se retorna el schema
+  }
+}
+```
+
+```ts
+@Post()
+@UsePipes(new CreateUserValidationPipe(createUserSchema))
+create(@Body() createUserDto: CreateUserDto) {
+  return this.usersService.create(createUserDto);
+}
+```
+
 
 ## Autor
 
