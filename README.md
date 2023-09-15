@@ -296,7 +296,38 @@ Los pipes en Nest.js se usan verificar aspectos concretos de una ruta para valid
 - ParseFloatPipe: si es un float
 - ParseUUIDPipe: si es un uuid.
 
+```ts
+@Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: string) {
+    return this.usersService.findOne(+id)
+  }
+```
 
+Podemos crear nuestro propio pipe para validar, por ejemplo, que un email sea un email, o que un id sea un uuid, etc. Para ello debemos crear una clase que implemente PipeTransform y usarla en el controlador o en el módulo.
+También lo puedes hacer con el comando:
+```bash
+nest g pi parse-int
+```
+
+```ts
+@Injectable()
+export class CustomPipe implements PipeTransform<string, number> {
+  transform(value: string, metadata: ArgumentMetadata): number {
+    const val = parseInt(value, 10)
+    if (isNaN(val)) {
+      throw new BadRequestException(`${value} is not an number`)
+    }
+    return val
+  }
+}
+```
+
+```ts
+@Get(':id')
+  findOne(@Param('id', new CustomPipe()) id: string) {
+    return this.usersService.findOne(+id)
+  }
+```
 
 
 ## Autor
