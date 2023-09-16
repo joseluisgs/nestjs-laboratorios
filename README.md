@@ -23,6 +23,7 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
   - [Excepciones](#excepciones)
   - [Pipes](#pipes)
       - [Validaciones de Pipe](#validaciones-de-pipe)
+  - [Validaciones](#validaciones)
   - [Autor](#autor)
     - [Contacto](#contacto)
   - [Licencia de uso](#licencia-de-uso)
@@ -364,6 +365,59 @@ create(@Body() createUserDto: CreateUserDto) {
 }
 ```
 
+## Validaciones
+Vamos a profundizar validaciones sin hacer uso de Joi, para validar los datos con esquemas, si no de las clases de Node:
+- class-validator
+- class-transformer
+
+Lo primero es activar las validaciones globales en nuestro main:
+```ts
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe());
+  await app.listen(3000);
+}
+bootstrap();
+```
+
+Ahora podemos hacer nuestras validaciones en los DTOs con decoradores y si queremos podemos personalizar las respuestas del error que se obtendrá al no pasar las validaciones. El locale no es obligatorio:
+```ts
+enum UserType {
+  ADMIN = 'admin',
+  USER = 'user',
+}
+
+export class CreateUserDto {
+  @IsAlpha('es-ES', { message: 'El nombre solo puede contener letras' })
+  //@IsNotEmpty()
+  readonly name: string
+
+  @IsAlpha()
+  //@IsNotEmpty()
+  readonly surname: string
+
+  @IsInt()
+  @Min(18)
+  @Max(90)
+  readonly age: number
+
+  @IsEmail()
+  readonly email: string
+
+  @IsString()
+  @IsOptional()
+  readonly address: string
+
+  @IsBoolean()
+  readonly single: boolean
+
+  @IsEnum(UserType)
+  readonly userType: string
+}
+
+// Al usar un tipo parcial, obtenemos lo que hemos ya implementado con anotaciones.
+export class UpdateUserDto extends PartialType(CreateUserDto) {}
+```
 
 ## Autor
 
