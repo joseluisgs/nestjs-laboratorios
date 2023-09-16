@@ -19,11 +19,12 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
     - [Providers](#providers)
     - [Module](#module)
   - [Generador de CRUDS](#generador-de-cruds)
-    - [Middlewares](#middlewares)
+  - [Middlewares](#middlewares)
   - [Excepciones](#excepciones)
   - [Pipes](#pipes)
       - [Validaciones de Pipe](#validaciones-de-pipe)
   - [Validaciones](#validaciones)
+  - [Logging](#logging)
   - [Autor](#autor)
     - [Contacto](#contacto)
   - [Licencia de uso](#licencia-de-uso)
@@ -48,7 +49,9 @@ Los decoradores en Nest.js son expanden la funcionalidad de el método, propieda
 Ej: @Controller(‘usuarios’), @Ip(), @CustomDecorator()
 
 ### Controller
-Los controladores son los encargados de recibir las peticiones HTTP y devolver una respuesta. Los controladores son clases decoradas con @Controller() y que contienen métodos decorados con @Get(), @Post(), @Put(), @Delete(), @Patch(), @Options(), @Head(), @All().S
+Los [controladores](https://docs.nestjs.com/controllers) son los encargados de recibir las peticiones HTTP y devolver una respuesta. Los controladores son clases decoradas con @Controller() y que contienen métodos decorados con @Get(), @Post(), @Put(), @Delete(), @Patch(), @Options(), @Head(), @All().
+
+![](https://docs.nestjs.com/assets/Controllers_1.png)
 
 Se crea con el comando de nest
 ```bash
@@ -126,7 +129,9 @@ Por ejemplo cómo forzar que el id sea un número al hacer un get
 ```
 
 ### Providers
-Los servicios, repositorios son Providers son clases que contienen la lógica de negocio de nuestra aplicación. Los servicios son clases decoradas con @Injectable() y que pueden ser inyectadas en los controladores, módulos u otros servicios. Por lo tanto alojan la lógica de negocio de tal manera que sea reutilizable mediante inyección de dependencias.
+Los servicios, repositorios son [Providers](https://docs.nestjs.com/providers) son clases que contienen la lógica de negocio de nuestra aplicación. Los servicios son clases decoradas con @Injectable() y que pueden ser inyectadas en los controladores, módulos u otros servicios. Por lo tanto alojan la lógica de negocio de tal manera que sea reutilizable mediante inyección de dependencias.
+
+![](https://docs.nestjs.com/assets/Components_1.png)
 
 De hecho, lo que hacemos con ellos es liberar al controlador de toda la lógica, pues el controlador se encarga de recibir la petición y devolver una respuesta, y la lógica de negocio se la delega al servicio o repositorios (principios de responsabilidad única).
 
@@ -145,7 +150,9 @@ export class UsuariosService {
 ```
 
 ### Module
-Los módulos son clases que contienen los controladores y servicios que se van a utilizar en nuestra aplicación. Los módulos son clases decoradas con @Module() y que pueden ser inyectadas en otros módulos. Agrupan y desacoplan un conjunto de funcionalidad específica por dominio. Gracias a ellos podemos hacer el IoC (Sistema de Inversión de Control).
+Los [módulos](https://docs.nestjs.com/modules) son clases que contienen los controladores y servicios que se van a utilizar en nuestra aplicación. Los módulos son clases decoradas con @Module() y que pueden ser inyectadas en otros módulos. Agrupan y desacoplan un conjunto de funcionalidad específica por dominio. Gracias a ellos podemos hacer el IoC (Sistema de Inversión de Control).
+
+![](https://docs.nestjs.com/assets/Modules_1.png)
 
 El módulo principal para la aplicación es: AppModule
 
@@ -173,8 +180,10 @@ nest g res usuarios
 
 Podemos elegir entre distintos servicios (REST, GraphQL, Websockets, ...) y si queremos todo el esqueleto o solo parte.
 
-### Middlewares
-Un middleware es una función que se ejecuta antes de que se ejecute el controlador. Se pueden usar para comprobar si el usuario está autenticado, si tiene permisos, pre-validar bodies, etc. Es decir, cuando nos llega una petición, antes de entregarla al controlador, se ejecuta el middleware para ver si se puede ejecutar o no. 
+## Middlewares
+Un [middleware](https://docs.nestjs.com/middleware) es una función que se ejecuta antes de que se ejecute el controlador. Se pueden usar para comprobar si el usuario está autenticado, si tiene permisos, pre-validar bodies, etc. Es decir, cuando nos llega una petición, antes de entregarla al controlador, se ejecuta el middleware para ver si se puede ejecutar o no. 
+
+![](https://docs.nestjs.com/assets/Middlewares_1.png)
 
 Puedes crearlo con la orden:
 ```bash
@@ -221,8 +230,10 @@ export class AppModule implements NestModule {
 ```
 
 ## Excepciones
-Las excepciones nos serrán para devolver código de estado y mensajes ante operaciones que no se han realizado correctamente.
-Podemos usar en servicios los objetos `HttpException` o algunos más personalizados como `BadRequestException`, `NotFoundException`, `ConflictException`, `ForbiddenException`, `UnauthorizedException`, `NotAcceptableException`, `RequestTimeoutException`, `InternalServerErrorException`, `NotImplementedException`, `BadGatewayException`, `ServiceUnavailableException`, `GatewayTimeoutException`.
+Las [excepciones](https://docs.nestjs.com/exception-filters) nos serán para devolver código de estado y mensajes ante operaciones que no se han realizado correctamente.
+Podemos usar en servicios los objetos `HttpException` o algunos más personalizados como `BadRequestException`, `NotFoundException`, `ConflictException`, `ForbiddenException`, `UnauthorizedException`...
+
+![](https://docs.nestjs.com/assets/Filter_1.png)
 
 ```ts
 @Get(':id')
@@ -287,7 +298,10 @@ bootstrap();
 ```
 
 ## Pipes
-Los pipes en Nest.js se usan verificar aspectos concretos de una ruta para validarlos antes de que pasen al controlador. Puede ser como un middleware pero específico para una ruta. Por ejemplo, podemos usarlo para validar que un id sea un número, que un email sea un email, etc.
+Los [pipes](https://docs.nestjs.com/pipes) en Nest.js se usan verificar aspectos concretos de una ruta para validarlos antes de que pasen al controlador. Puede ser como un middleware pero específico para una ruta. Por ejemplo, podemos usarlo para validar que un id sea un número, que un email sea un email, etc. Nos sirven para transformar un dato de entrada que puede ser de un tipo al requerido. Por ejemplo, si queremos que un id sea un número, podemos usar el pipe ParseIntPipe, que transforma el string a un número. Si no es un número, lanza una excepción BadRequestException.
+
+![](https://docs.nestjs.com/assets/Pipe_1.png)
+
 
 #### Validaciones de Pipe
 - ValidationPipe
@@ -418,6 +432,49 @@ export class CreateUserDto {
 // Al usar un tipo parcial, obtenemos lo que hemos ya implementado con anotaciones.
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
 ```
+
+## Logging
+Podemos usar logs personalizados para nuestra aplicación.
+Lo primero es usar el objeto Logger en nuestros servicios y llamarlo cuando queramos en nuestro código. 
+```ts
+@Injectable()
+export class UsersService {
+  private readonly logger = new Logger(UsersService.name)
+
+  create(createUserDto: CreateUserDto) {
+    return 'This action adds a new user'
+  }
+
+  findAll() {
+    this.logger.log('estas acción ejecuta findAll') // puedes usar warn, error, etc.
+    return `This action returns all users`
+  }
+}
+```
+
+También en nuestro main podemos activar o desactivar los loggers (false) o algunos de sus tipos.
+```ts
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule, {
+    logger: ['error', 'warn', 'log'],
+  })
+  await app.listen(3000)
+}
+
+bootstrap()
+```
+
+O decirle que lo haga el console
+```ts
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule, {
+    logger: console,
+  })
+  await app.listen(3000)
+}
+```
+
+También me puedo hacer mi propio log, de una clase que implemente la interfaz LoggerService
 
 ## Autor
 
