@@ -638,7 +638,7 @@ Luego importamos el esquema en el módulo donde va a ser usado, por ejemplo en p
 export class ProductsModule {}
 ```
 
-Finalmente inyectamos el documento para trabajar en nuestro servicio, ojo, cuidado con el id, que viene como string y debemos transformalo a id de Mongo:
+Finalmente inyectamos el documento para trabajar en nuestro servicio, ojo, cuidado con el id que tiene que ser en formato mongo, y no olvides ejecutar la consulta con exec y por supuesto el manejo de promesas
 ```ts
 @Injectable()
 export class ProductsService {
@@ -649,22 +649,19 @@ export class ProductsService {
   ) {}
 
   async findAll() {
-    return this.productModel.find().find()
+    return this.productModel.find().find().exec()
   }
 
   findOne(id: string) {
-    return this.productModel.findById(id)
-  }
-
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`
+    return this.productModel.findById(id).exec()
   }
 
   async remove(id: string) {
-    const myId = new mongoose.Types.ObjectId(id)
-    return this.productModel.findByIdAndDelete(myId)
+    //const myId = new mongoose.Types.ObjectId(id)
+    return this.productModel.findByIdAndRemove(id).exec()
   }
 }
+
 ```
 
 ## Autor

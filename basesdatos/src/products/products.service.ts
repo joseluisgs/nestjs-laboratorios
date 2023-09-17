@@ -3,7 +3,7 @@ import { CreateProductDto } from './dto/create-product.dto'
 import { UpdateProductDto } from './dto/update-product.dto'
 import { InjectModel } from '@nestjs/mongoose'
 import { Product, ProductDocument } from './schemas/product.schema'
-import mongoose, { Model } from 'mongoose'
+import { Model } from 'mongoose'
 
 @Injectable()
 export class ProductsService {
@@ -18,11 +18,11 @@ export class ProductsService {
   }
 
   async findAll() {
-    return this.productModel.find().find()
+    return this.productModel.find().find().exec()
   }
 
   findOne(id: string) {
-    return this.productModel.findById(id)
+    return this.productModel.findById(id).exec()
   }
 
   update(id: number, updateProductDto: UpdateProductDto) {
@@ -30,7 +30,7 @@ export class ProductsService {
   }
 
   async remove(id: string) {
-    const myId = new mongoose.Types.ObjectId(id)
-    return this.productModel.findByIdAndDelete(myId)
+    //const myId = new mongoose.Types.ObjectId(id)
+    return this.productModel.findByIdAndRemove(id).exec()
   }
 }
