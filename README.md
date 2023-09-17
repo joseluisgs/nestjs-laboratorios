@@ -25,6 +25,7 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
       - [Validaciones de Pipe](#validaciones-de-pipe)
   - [Validaciones](#validaciones)
   - [Logging](#logging)
+  - [Bases de Datos](#bases-de-datos)
   - [Autor](#autor)
     - [Contacto](#contacto)
   - [Licencia de uso](#licencia-de-uso)
@@ -475,6 +476,8 @@ async function bootstrap() {
 ```
 
 También me puedo hacer mi propio log, de una clase que implemente la interfaz LoggerService
+
+## Bases de Datos
 
 ## Autor
 
