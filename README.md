@@ -485,6 +485,60 @@ Lo primero es instalar su módulo y las dependencias a TypeORM y a cada uno de l
 npm install --save @nestjs/typeorm typeorm pg
 ```
 
+Luego configuramos la conexión en nuestro app.module.ts
+```ts
+@Module({
+  imports: [
+    UsersModule,
+    ProductsModule,
+    // Configuración de la conexión a la base de datos a PostgreSQL
+    TypeOrmModule.forRoot({
+      type: 'postgres', // Tipo de base de datos
+      host: 'localhost', // Dirección del servidor
+      port: 5432, // Puerto del servidor
+      username: 'admin', // Nombre de usuario
+      password: 'adminPassword123', // Contraseña de usuario
+      database: 'NEST_DB', // Nombre de la base de datos
+      entities: [__dirname + '/**/*.entity{.ts,.js}'], // Entidades de la base de datos (buscar archivos con extensión .entity.ts o .entity.js)
+      synchronize: true, // Sincronizar la base de datos
+    }),
+  ],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {}
+```
+
+Luego nos creamos las entidades de datos, que son las clases que representan las tablas de la base de datos en base a anotaciones de TypeORM cons sus opciones si no queremos que tomen las opciones por defecto. Por ejemplo, para un usuario:
+```ts
+@Entity('users') // Nombre de la tabla
+export class User {
+  @PrimaryGeneratedColumn() // Columna de clave primaria autoincrementable
+  id: number
+
+  @Column('varchar', { length: 255, nullable: false, name: 'first_name' })
+  firstname: string
+
+  @Column('varchar', { length: 255, nullable: false, name: 'last_name' })
+  lastname: string
+
+  @Column('varchar', { length: 255, nullable: true, default: 'no address' })
+  address: string
+
+  @Column('varchar', {
+    length: 150,
+    nullable: false,
+    name: 'single_status',
+    default: false,
+  })
+  single: boolean
+}
+```	
+
+El siguiente paso es registrar las entidades de datos en el módulo, se puede hacer con ` entities: [__dirname + '/**/*.entity{.ts,.js}']` o poniendo el nombre de la entidad a mano. Se crearán las tablas en la base de datos.
+
+
+
 ## Autor
 
 Codificado con :sparkling*heart: por [José Luis González Sánchez](https://twitter.com/JoseLuisGS*)
