@@ -17,11 +17,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
       username: 'admin', // Nombre de usuario
       password: 'adminPassword123', // Contraseña de usuario
       database: 'NEST_DB', // Nombre de la base de datos
-<<<<<<< HEAD
       entities: [__dirname + '/**/*.entity{.ts,.js}'], // Entidades de la base de datos (buscar archivos con extensión .entity.ts o .entity.js)
-=======
-      entities: [], // Archivos de entidades
->>>>>>> main
       synchronize: true, // Sincronizar la base de datos
     }),
   ],
