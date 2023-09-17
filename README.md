@@ -537,6 +537,40 @@ export class User {
 
 El siguiente paso es registrar las entidades de datos en el módulo, se puede hacer con ` entities: [__dirname + '/**/*.entity{.ts,.js}']` o poniendo el nombre de la entidad a mano. Se crearán las tablas en la base de datos.
 
+Ahora vamos a usar el patrón repositorio. Lo primero es registrar nuestra entidad en el controlador (usuarios).
+```ts
+@Module({
+  controllers: [UsersController],
+  providers: [UsersService],
+  // Importamos el módulo de TypeORM y le pasamos la entidad a usar
+  imports: [TypeOrmModule.forFeature([User])],
+})
+export class UsersModule {}
+```
+
+Luego en nuestro servicio importamos el repositorio de la entidad y lo usamos en los métodos del servicio. Importante los métdodos devuelven una promesa, por lo que debemos usar async/await o then/catch.
+```ts
+@Injectable()
+export class UsersService {
+  // Nos creamos el repositorio de usuarios, que es el que se encarga de la lógica de negocio
+  constructor(
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+  ) {}
+
+
+  async findAll() {
+    return this.userRepository.find()
+  }
+
+  async findOne(id: number) {
+    return this.userRepository.findOneBy({ id })
+  }
+
+  async remove(id: number) {
+    return this.userRepository.delete({ id })
+  }
+}
+
 
 
 ## Autor
