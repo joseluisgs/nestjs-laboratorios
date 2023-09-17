@@ -666,7 +666,12 @@ export class ProductsService {
 ```
 
 ## Variables de entorno
-Meter los datos sensibles, como conraseñas y cadenas de conexión en el código no es lo recomendable, por lo que debemos trabajar con variables de entorno para solucionar este hecho
+Meter los datos sensibles, como contraseñas y cadenas de conexión en el código no es lo recomendable, o simplemente para adaptar a distintos entornos, por lo que debemos trabajar con variables de entorno para solucionar este hecho usamos los ficheros .env
+
+Para ello instalamos el paquete config de Nest.js
+```bash
+npm install --save @nestjs/config
+```
 
 ## Autor
 
