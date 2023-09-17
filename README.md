@@ -485,6 +485,30 @@ Lo primero es instalar su módulo y las dependencias a TypeORM y a cada uno de l
 npm install --save @nestjs/typeorm typeorm pg
 ```
 
+Luego configuramos la conexión en nuestro app.module.ts
+```ts
+@Module({
+  imports: [
+    UsersModule,
+    ProductsModule,
+    // Configuración de la conexión a la base de datos a PostgreSQL
+    TypeOrmModule.forRoot({
+      type: 'postgres', // Tipo de base de datos
+      host: 'localhost', // Dirección del servidor
+      port: 5432, // Puerto del servidor
+      username: 'admin', // Nombre de usuario
+      password: 'adminPassword123', // Contraseña de usuario
+      database: 'NEST_DB', // Nombre de la base de datos
+      entities: [], // Archivos de entidades
+      synchronize: true, // Sincronizar la base de datos
+    }),
+  ],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {}
+```
+
 ## Autor
 
 Codificado con :sparkling*heart: por [José Luis González Sánchez](https://twitter.com/JoseLuisGS*)
