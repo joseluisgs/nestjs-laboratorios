@@ -499,7 +499,11 @@ Luego configuramos la conexión en nuestro app.module.ts
       username: 'admin', // Nombre de usuario
       password: 'adminPassword123', // Contraseña de usuario
       database: 'NEST_DB', // Nombre de la base de datos
+<<<<<<< HEAD
       entities: [__dirname + '/**/*.entity{.ts,.js}'], // Entidades de la base de datos (buscar archivos con extensión .entity.ts o .entity.js)
+=======
+      entities: [], // Archivos de entidades
+>>>>>>> main
       synchronize: true, // Sincronizar la base de datos
     }),
   ],
@@ -509,6 +513,7 @@ Luego configuramos la conexión en nuestro app.module.ts
 export class AppModule {}
 ```
 
+<<<<<<< HEAD
 Luego nos creamos las entidades de datos, que son las clases que representan las tablas de la base de datos en base a anotaciones de TypeORM cons sus opciones si no queremos que tomen las opciones por defecto. Por ejemplo, para un usuario:
 ```ts
 @Entity('users') // Nombre de la tabla
@@ -573,6 +578,8 @@ export class UsersService {
 
 
 
+=======
+>>>>>>> main
 ## Autor
 
 Codificado con :sparkling*heart: por [José Luis González Sánchez](https://twitter.com/JoseLuisGS*)
