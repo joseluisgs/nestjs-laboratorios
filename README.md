@@ -28,6 +28,7 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
   - [Bases de Datos](#bases-de-datos)
     - [Ejemplo con PostgreSQL](#ejemplo-con-postgresql)
     - [Ejemplo con MongoDB](#ejemplo-con-mongodb)
+  - [Variables de entorno](#variables-de-entorno)
   - [Autor](#autor)
     - [Contacto](#contacto)
   - [Licencia de uso](#licencia-de-uso)
@@ -663,6 +664,9 @@ export class ProductsService {
 }
 
 ```
+
+## Variables de entorno
+Meter los datos sensibles, como conraseñas y cadenas de conexión en el código no es lo recomendable, por lo que debemos trabajar con variables de entorno para solucionar este hecho
 
 ## Autor
 
