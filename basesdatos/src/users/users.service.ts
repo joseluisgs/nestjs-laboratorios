@@ -29,6 +29,6 @@ export class UsersService {
   }
 
   async remove(id: number) {
-    return this.userRepository.delete({ id })
+    return await this.userRepository.delete({ id })
   }
 }

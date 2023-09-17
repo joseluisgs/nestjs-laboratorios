@@ -26,6 +26,8 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
   - [Validaciones](#validaciones)
   - [Logging](#logging)
   - [Bases de Datos](#bases-de-datos)
+    - [Ejemplo con PostgreSQL](#ejemplo-con-postgresql)
+    - [Ejemplo con MongoDB](#ejemplo-con-mongodb)
   - [Autor](#autor)
     - [Contacto](#contacto)
   - [Licencia de uso](#licencia-de-uso)
@@ -480,6 +482,8 @@ También me puedo hacer mi propio log, de una clase que implemente la interfaz L
 ## Bases de Datos
 Para trabajar con Bases de Datos nos vamos a ayudar de Docker y Docker Compose y sobre todo de [TypeORM](https://typeorm.io/), que es on ORM para JS/TypeScript y compatible totalmente con [Nest.js](https://docs.nestjs.com/techniques/database).
 
+### Ejemplo con PostgreSQL
+
 Lo primero es instalar su módulo y las dependencias a TypeORM y a cada uno de los SGDB que usemos, por ejemplo, para PostgreSQL:
 ```bash
 npm install --save @nestjs/typeorm typeorm pg
@@ -548,7 +552,7 @@ Ahora vamos a usar el patrón repositorio. Lo primero es registrar nuestra entid
 export class UsersModule {}
 ```
 
-Luego en nuestro servicio importamos el repositorio de la entidad y lo usamos en los métodos del servicio. Importante los métdodos devuelven una promesa, por lo que debemos usar async/await o then/catch.
+Luego en nuestro servicio importamos el repositorio de la entidad y lo usamos en los métodos del servicio. Importante los métdodos devuelven una promesa, por lo que debemos usar async/await o then/catch y también en el controlador!!!.
 ```ts
 @Injectable()
 export class UsersService {
@@ -571,7 +575,97 @@ export class UsersService {
   }
 }
 ```
+### Ejemplo con MongoDB
 
+Instalamos sus dependencias tanto para Nest.js como la de MongoDB
+```bash
+npm install --save @nestjs/mongoose mongoose
+```
+
+Creamos la conexión en app.module.ts con MongooseModule
+```ts
+@Module({
+  imports: [
+    UsersModule,
+    ProductsModule,
+    // Configuración para la conexión a la base de datos a MongoDB
+    MongooseModule.forRoot(
+      'mongodb://admin:adminPassword123@localhost:27017/NEST_DB', // Dirección de la base de datos
+    ),
+  ],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {}
+```
+
+Luego nos creamos el esquema de datos para la colecciones, porque no usamos "entidades" al ser NoSQL. Para ello nos creamos un archivo con el definimos el esquema de datos, por ejemplo, para un productos. Además debemos crear un tipo de dato para que lo pueda manejar los documentos y finalmente el esquema de los repositorios:
+```ts
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Document } from 'mongoose'
+
+@Schema()
+export class Product {
+  // No hace falta definir el id, pero lo dejo para que veas cómo se haría
+  /* @ObjectIdColumn()
+   id: ObjectId*/
+
+  @Prop({ type: String, required: true })
+  name: string
+
+  @Prop({ type: Number, default: 0, required: true })
+  quantity: number
+}
+
+// Definimos el tipo de documento de la colección de productos como union type
+export type ProductDocument = Product & Document
+
+// Definimos el schema de la colección de productos para el repositorio de TypeORM
+export const ProductSchema = SchemaFactory.createForClass(Product)
+
+```
+
+Luego importamos el esquema en el módulo donde va a ser usado, por ejemplo en productos
+```ts	
+@Module({
+  controllers: [ProductsController],
+  providers: [ProductsService],
+  // importamos el módulo de TypeORM Mongoose y le pasamos el schema a usar
+  imports: [
+    MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }]),
+  ],
+})
+export class ProductsModule {}
+```
+
+Finalmente inyectamos el documento para trabajar en nuestro servicio, ojo, cuidado con el id, que viene como string y debemos transformalo a id de Mongo:
+```ts
+@Injectable()
+export class ProductsService {
+  // Inyectamos el documento de productos de Mongoose
+  constructor(
+    @InjectModel(Product.name)
+    private readonly productModel: Model<ProductDocument>,
+  ) {}
+
+  async findAll() {
+    return this.productModel.find().find()
+  }
+
+  findOne(id: string) {
+    return this.productModel.findById(id)
+  }
+
+  update(id: number, updateProductDto: UpdateProductDto) {
+    return `This action updates a #${id} product`
+  }
+
+  async remove(id: string) {
+    const myId = new mongoose.Types.ObjectId(id)
+    return this.productModel.findByIdAndDelete(myId)
+  }
+}
+```
 
 ## Autor
 
