@@ -478,6 +478,12 @@ async function bootstrap() {
 También me puedo hacer mi propio log, de una clase que implemente la interfaz LoggerService
 
 ## Bases de Datos
+Para trabajar con Bases de Datos nos vamos a ayudar de Docker y Docker Compose y sobre todo de [TypeORM](https://typeorm.io/), que es on ORM para JS/TypeScript y compatible totalmente con [Nest.js](https://docs.nestjs.com/techniques/database).
+
+Lo primero es instalar su módulo y las dependencias a TypeORM y a cada uno de los SGDB que usemos, por ejemplo, para PostgreSQL:
+```bash
+npm install --save @nestjs/typeorm typeorm pg
+```
 
 ## Autor
 
