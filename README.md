@@ -29,6 +29,8 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
     - [Ejemplo con PostgreSQL](#ejemplo-con-postgresql)
     - [Ejemplo con MongoDB](#ejemplo-con-mongodb)
   - [Variables de entorno](#variables-de-entorno)
+  - [Testing](#testing)
+    - [Test unitarios](#test-unitarios)
   - [Autor](#autor)
     - [Contacto](#contacto)
   - [Licencia de uso](#licencia-de-uso)
@@ -707,6 +709,12 @@ Luego lo importamos en nuestro app.module.ts, cuidado que el módulo de config d
 })
 export class AppModule {}
 ```
+
+## Testing
+Para hacer el testing con [Nest.js](https://docs.nestjs.com/fundamentals/testing) haremos uso de [Jest](https://jestjs.io/es-ES/docs/getting-started) y [Supertest](https://github.com/ladjs/supertest).
+
+### Test unitarios
+Se usara Jest
 
 ## Autor
 
