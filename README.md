@@ -34,6 +34,7 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
     - [Test unitarios de controladores](#test-unitarios-de-controladores)
     - [Testing E2E](#testing-e2e)
     - [Testing Coverage](#testing-coverage)
+  - [Documentación con Swagger](#documentación-con-swagger)
   - [Autor](#autor)
     - [Contacto](#contacto)
   - [Licencia de uso](#licencia-de-uso)
@@ -985,6 +986,35 @@ describe('UsersController (e2e)', () => {
 
 ### Testing Coverage
 Nos indica el grado de cobertura de nuestro código.
+
+## Documentación con Swagger
+Para comenzar a documentar un proyecto con [OpenAPI y Swagger](https://docs.nestjs.com/openapi/introduction), debes instalar la dependencia `@nestjs/swagger` y `swagger-ui-express`:
+```bash
+$ npm install --save @nestjs/swagger
+```
+
+Luego configuramos nuestro fichero main, con los datos de la documentación y los tags a recursos. Estará disponible en: http://localhost:3000/api.
+
+```ts
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule)
+  // Swagger
+  const config = new DocumentBuilder()
+    .setTitle('Swagger Ejemplo')
+    .setDescription('Api de ejemplo para documentar con Swagger')
+    .setVersion('1.0')
+    .addTag('users') // Añadimos un tag al endpoint
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+  // Lanzamos el servidor
+  await app.listen(3000)
+}
+bootstrap()
+```
+
+A partir de este momento podemos documentar usando decoradores.
+
 
 ## Autor
 
