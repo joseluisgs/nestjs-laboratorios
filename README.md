@@ -30,7 +30,10 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
     - [Ejemplo con MongoDB](#ejemplo-con-mongodb)
   - [Variables de entorno](#variables-de-entorno)
   - [Testing](#testing)
-    - [Test unitarios](#test-unitarios)
+    - [Test unitarios de servicios](#test-unitarios-de-servicios)
+    - [Test unitarios de controladores](#test-unitarios-de-controladores)
+    - [Testing E2E](#testing-e2e)
+    - [Testing Coverage](#testing-coverage)
   - [Autor](#autor)
     - [Contacto](#contacto)
   - [Licencia de uso](#licencia-de-uso)
@@ -713,8 +716,275 @@ export class AppModule {}
 ## Testing
 Para hacer el testing con [Nest.js](https://docs.nestjs.com/fundamentals/testing) haremos uso de [Jest](https://jestjs.io/es-ES/docs/getting-started) y [Supertest](https://github.com/ladjs/supertest).
 
-### Test unitarios
-Se usara Jest
+### Test unitarios de servicios
+Se usara Jest, debemos cargar el módulo del test
+```ts
+// Describe, es como se agrupan las pruebas, Test suite
+describe('UsersService', () => {
+  let service: UsersService
+
+  // beforeEach, se ejecuta antes de cada prueba
+  beforeEach(async () => {
+    // Se crea un modulo de testing para poder hacer las pruebas unitarias
+    // cargando el servicio que se quiere probar
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [UsersService],
+    }).compile()
+
+    service = module.get<UsersService>(UsersService)
+  })
+
+  // It, es una prueba
+  it('should be defined', () => {
+    expect(service).toBeDefined()
+  })
+
+  // Creamos una prueba para el metodo create
+  it('should create a user', () => {
+    // Creamos el mock del usuario
+    const mockUser = {
+      id: 99,
+      name: 'mockName',
+      surname: 'mockSurname',
+    }
+    // Llamamos al metodo create del servicio
+    const result = service.create(mockUser)
+    // Comprobamos que el resultado sea un objeto con las propiedades que esperamos
+    expect(result).toEqual(
+      expect.objectContaining({
+        id: expect.any(Number),
+        name: expect.any(String),
+        surname: expect.any(String),
+      }),
+    )
+  })
+
+  // Creamos una prueba para el metodo findAll
+  it('should return all users', () => {
+    // Llamamos al metodo findAll del servicio
+    const result = service.findAll()
+    // Comprobamos que el resultado sea un array
+    expect(Array.isArray(result)).toBe(true)
+  })
+
+  // Creamos una prueba para el metodo findOne
+  it('should return an user by id', () => {
+    const mockID = 1 // Mock del id
+    // Llamamos al metodo findOne del servicio
+    const result = service.findOne(mockID)
+    // Comprobamos que el resultado sea un objeto con las propiedades que esperamos
+    // También podríamos crearnos el mock del usuario y comprobar que el resultado es igual al mock
+    expect(result).toEqual(
+      expect.objectContaining({
+        id: expect.any(Number),
+        name: expect.any(String),
+        surname: expect.any(String),
+      }),
+    )
+  })
+
+  // Creamos una prueba para el metodo update
+  it('should update a user by id', () => {
+    // Creamos el mock del usuario
+    const mockUser = {
+      name: 'mockName',
+      surname: 'mockSurname',
+    }
+    const mockID = 1
+    // Llamamos al metodo update del servicio
+    const result = service.update(mockID, mockUser)
+    // Comprobamos que el resultado sea un objeto con las propiedades que esperamos
+    expect(result).toEqual(
+      expect.objectContaining({
+        id: expect.any(Number),
+        name: expect.any(String),
+        surname: expect.any(String),
+      }),
+    )
+    // Comprobamos que el resultado sea igual al mock (los campos que hemos actualizado)
+    expect(result.name).toEqual(mockUser.name)
+    expect(result.surname).toEqual(mockUser.surname)
+  })
+})
+
+```
+
+### Test unitarios de controladores
+Para haver el test unitario de controladores, lo que debemos es cargar nuestro controlador y servicio en el módulo de test y luego hacer mocks, con la función spy con [mockImplementation](https://jestjs.io/docs/mock-function-api#mockfnmockimplementationfn) de los métodos del servicio. Usamos un describe por cada método is este tiene distintos resultados (correcto o excepciones)
+```ts
+// Suite del test
+describe('UsersController', () => {
+  let userController: UsersController // Variable para almacenar el controlador a testear
+  let userService: UsersService // Variable para almacenar el servicio a testear
+
+  // beforeEach, se ejecuta antes de cada prueba
+  // Cargamos el controlador y el servicio que queremos probar
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [UsersController],
+      providers: [UsersService],
+    }).compile()
+
+    userService = module.get<UsersService>(UsersService)
+    userController = module.get<UsersController>(UsersController)
+  })
+
+  it('should be defined', () => {
+    expect(userController).toBeDefined()
+  })
+
+  // Creamos una suite para los casos de prueba del metodo create
+  describe('create user test bed', () => {
+    // Creamos una prueba para el caso de que se cree un usuario correctamente
+    it('should create a new user', async () => {
+      const mockUser = {
+        id: 1,
+        name: 'name',
+        surname: 'surname',
+      }
+      // Creamos un mock del metodo create del servicio, cuando se llame al método create del servicio
+      // devolverá el mockUser
+      jest.spyOn(userService, 'create').mockImplementation(() => mockUser)
+      // Llamamos al metodo create del controlador
+      const result = await userController.create(mockUser)
+      // Comprobamos que el resultado sea el mockUser
+      expect(result).toBe(mockUser)
+    })
+
+    // Creamos una prueba para el caso de que se cree un usuario con datos incorrectos
+    it('should return a not acceptable exception', async () => {
+      const mockUSer = {
+        id: 0,
+        name: '',
+        surname: '',
+      }
+      // Creamos un mock del metodo create del servicio, cuando se llame al método create del servicio
+      jest.spyOn(userService, 'create').mockImplementation(() => mockUSer)
+      // Llamamos al metodo create del controlador y comprbamos que se lanza una excepción
+      try {
+        await userController.create(mockUSer)
+      } catch (e) {
+        // Comprobamos que el mensaje de la excepción sea el esperado
+        expect(e.message).toBe('invalid user data')
+      }
+    })
+  })
+
+  // Creamos una suite para los casos de prueba del metodo findOne
+  describe('find all users test bd', () => {
+    it('should return all users', async () => {
+      const mockResult = [
+        {
+          id: 1,
+          name: 'name',
+          surname: 'surname',
+        },
+      ]
+      // Creamos un mock del metodo findAll del servicio, cuando se llame al método findAll del servicio
+      jest.spyOn(userService, 'findAll').mockImplementation(() => mockResult)
+      const result = await userController.findAll()
+      // Comprobamos que el resultado sea el mock
+      expect(result).toBe(mockResult)
+    })
+  })
+})
+```
+
+### Testing E2E
+Para el testing E2E usaremos Supertest. Es importante cargar Nest y poder mockear los elementos que queramos con su comportamiento. Si no lo hacemos estamos aplicando test de integración, si fuese una Base de Datos lo que usa el servicio accederíamos a ella pero no queremos eso, queremos mockear y solo comprobar el controlador. Pero ya dependerá del problema y tipo de test que busquemos dentro del E2E.
+```ts
+// Suite del test
+describe('UsersController (e2e)', () => {
+  let app: INestApplication // almacena la aplicación
+  const mockUSer = {
+    id: 1,
+    name: 'name',
+    surname: 'surname',
+  }
+
+  // Creamos un mock del servicio global con los métodos que vamos a utilizar y su comportamiento
+  // Si no usamos el mock hacemos un test de integración con los elemetos reales, pero si tuviesemos una BD
+  // la usaríamos para hacer las pruebas, y no queremos eso, queremos probar el controlador
+  const mockUserService = {
+    // Todos los métodos que vamos a utilizar o mockear
+    findAll: () => [mockUSer],
+    create: (user: any) => {
+      if (user.name.length > 0 && user.surname.length > 0) {
+        return mockUSer
+      }
+      throw new NotAcceptableException('invalid user data')
+    },
+    // Si hay mas métodos ponerlos aquí
+  }
+
+  // beforeAll, se ejecuta antes de todas las pruebas
+  beforeAll(async () => {
+    // Se carga un modulo de testing para poder hacer las pruebas e2e
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [UsersModule],
+    })
+      // Se sobreescribe el servicio global por el mock
+      .overrideProvider(UsersService)
+      .useValue(mockUserService)
+      .compile()
+
+    // Se crea la aplicación y esperamos que se inicie el servidor
+    app = moduleFixture.createNestApplication()
+    await app.init()
+  })
+
+  // Creamos una prueba para la ruta GET /users
+  it('/GET users', () => {
+    // Llamamos a la ruta y comprobamos que el resultado es el esperado
+    return request(app.getHttpServer())
+      .get('/users')
+      .expect(200)
+      .expect(mockUserService.findAll())
+  })
+
+  // Creamos una prueba para la ruta POST /users
+  describe('/POST users', () => {
+    // Creamos una prueba para el caso de que se cree un usuario correctamente
+    it('should create a user', () => {
+      const mockUSer = {
+        id: 1,
+        name: 'name',
+        surname: 'surname',
+      }
+      // Llamamos a la ruta y comprobamos que el resultado es el esperado
+      return request(app.getHttpServer())
+        .post('/users')
+        .send(mockUSer) // Enviamos el mock del usuario
+        .expect(201)
+        .expect(mockUSer)
+    })
+
+    // Creamos una prueba para el caso de que se cree un usuario con datos incorrectos
+    it('should return an invalid exception', async () => {
+      const mockUSer = {
+        id: 0,
+        name: '',
+        surname: '',
+      }
+      // Llamamos a la ruta y comprobamos que el resultado es el esperado
+      const response = await request(app.getHttpServer())
+        .post('/users')
+        .send(mockUSer)
+
+      // Comprobamos que el resultado es el esperado
+      expect(response.statusCode).toBe(406)
+      expect(response.body.message).toBe('invalid user data')
+    })
+  })
+
+  afterAll(async () => {
+    await app.close()
+  })
+})
+```
+
+### Testing Coverage
+Nos indica el grado de cobertura de nuestro código.
 
 ## Autor
 
