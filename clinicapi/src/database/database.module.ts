@@ -9,6 +9,7 @@ import { databaseProviders } from './database.provider'
   // Carga los providers de la conexión con la base de datos
   providers: [...databaseProviders],
   // Exporta los providers de la conexión con la base de datos
+  // Uso el spread operator para descomponer el array de providers y que no quede un array de arrays
   exports: [...databaseProviders],
 })
 export class DatabaseModule {
