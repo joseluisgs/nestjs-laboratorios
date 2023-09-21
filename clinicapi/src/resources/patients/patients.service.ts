@@ -1,4 +1,4 @@
-import { Inject, Injectable, InternalServerErrorException, Logger } from '@nestjs/common'
+import { Inject, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common'
 import { CreatePatientDto } from './dto/create-patient.dto'
 import { UpdatePatientDto } from './dto/update-patient.dto'
 import { Repository } from 'typeorm'
@@ -20,18 +20,37 @@ export class PatientsService {
     try {
       return await this.patientRepository.save(createPatientDto)
     } catch (e) {
-      const errorMessages = 'Error al crear Paciente en BD'
-      this.logger.error(errorMessages, e)
-      throw new InternalServerErrorException('Error al crear Paciente en BD')
+      const errorMessage = 'Error al crear Paciente en BD'
+      this.logger.error(errorMessage, e)
+      throw new InternalServerErrorException(errorMessage)
     }
   }
 
-  findAll() {
-    return this.patientRepository.find()
+  async findAll() {
+    try {
+      return await this.patientRepository.find()
+    } catch (e) {
+      const errorMessage = 'Error al obtener Pacientes en BD'
+      this.logger.error(errorMessage, e)
+      throw new InternalServerErrorException(errorMessage)
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} patient`
+  async findOne(id: string) {
+    let patientFound = null
+    try {
+      patientFound = await this.patientRepository.findOneBy({ id })
+    } catch (e) {
+      const errorMessage = 'Error al obtener Paciente en BD con id: ' + id
+      this.logger.error(errorMessage, e)
+      throw new InternalServerErrorException(errorMessage)
+    }
+    if (!patientFound) {
+      const errorMessage = 'No existe Paciente en BD con id: ' + id
+      this.logger.error(errorMessage)
+      throw new NotFoundException(errorMessage)
+    }
+    return patientFound
   }
 
   update(id: number, updatePatientDto: UpdatePatientDto) {

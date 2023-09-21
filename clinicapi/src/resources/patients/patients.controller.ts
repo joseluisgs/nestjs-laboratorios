@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotAcceptableException,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+} from '@nestjs/common'
 import { PatientsService } from './patients.service'
 import { CreatePatientDto } from './dto/create-patient.dto'
 import { UpdatePatientDto } from './dto/update-patient.dto'
@@ -19,8 +29,13 @@ export class PatientsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.patientsService.findOne(+id)
+  findOne(
+    @Param('id', new ParseUUIDPipe({
+      exceptionFactory: () => {
+        throw new NotAcceptableException('El id no es válido')
+      },
+    })) id: string) {
+    return this.patientsService.findOne(id)
   }
 
   @Patch(':id')
