@@ -67,7 +67,14 @@ export class PatientsService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} patient`
+  async remove(id: string) {
+    const patientToDelete = await this.findOne(id.toString())
+    try {
+      await this.patientRepository.remove(patientToDelete)
+    } catch (e) {
+      const errorMessage = 'Error al eliminar Paciente en BD con id: ' + id
+      this.logger.error(errorMessage, e)
+      throw new InternalServerErrorException(errorMessage)
+    }
   }
 }

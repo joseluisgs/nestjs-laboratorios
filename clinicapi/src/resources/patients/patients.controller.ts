@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   NotAcceptableException,
   Param,
   ParseUUIDPipe,
@@ -52,7 +53,13 @@ export class PatientsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.patientsService.remove(+id)
+  @HttpCode(204) // No Content
+  remove(@Param('id', new ParseUUIDPipe({
+           exceptionFactory: () => {
+             throw new NotAcceptableException('El id no es válido')
+           },
+         })) id: string,
+  ) {
+    return this.patientsService.remove(id)
   }
 }
