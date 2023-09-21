@@ -15,17 +15,17 @@ export class PatientEntity {
   @Column('varchar', { length: 150, nullable: false })
   lastname: string
 
-  @Column('varchar', { length: 50 })
+  @Column('varchar', { length: 50, nullable: false })
   phone: string
 
-  @Column('varchar', { length: 75 })
+  @Column('varchar', { length: 75, nullable: false })
   email: string
 
-  @Column('integer')
+  @Column('integer', { nullable: false })
   @Min(0)
   age: number
 
-  @Column('varchar', { length: 255 })
+  @Column('varchar', { length: 255, nullable: true, default: null })
   address: string
 
   @CreateDateColumn({ name: 'created_at' })
