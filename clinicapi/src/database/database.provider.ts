@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common'
 import { DataSource } from 'typeorm' // Importante
 import * as mongoose from 'mongoose'
+import { PatientEntity } from '../resources/patients/entities/patient.entity'
 
 /**
  * Proveedor encargado de la conexión con la base de datos
@@ -12,7 +13,7 @@ const logger = new Logger('DATABASE PROVIDER')
 // Constante que encapsula la conexión a la base de datos
 export const databaseProviders = [
   {
-    provide: 'POSTGRES_CONNECTION',
+    provide: 'POSTGRES_CONNECTION', // Nombre con el que se inyectará la conexión
     // Inyectamos la conexión a la base de datos y conectamos
     useFactory: () => new DataSource({
       type: 'postgres',
@@ -21,7 +22,7 @@ export const databaseProviders = [
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'], // Directorio donde se encuentran las entidades
+      entities: [PatientEntity], // Ponemos las entidades a gestionar por TypeORM
       synchronize: process.env.NODE_ENV === 'development', // Sincronizar la base de datos si estamos en entorno de desarrollo
     }).initialize()
       .then((connection) => {
@@ -34,7 +35,7 @@ export const databaseProviders = [
   },
   // Inyectamos la conexión a la base de datos y conectamos
   {
-    provide: 'MONGODB_CONNECTION',
+    provide: 'MONGODB_CONNECTION', // Nombre con el que se inyectará la conexión
     useFactory: () =>
       mongoose
         .connect(

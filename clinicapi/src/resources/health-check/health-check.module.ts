@@ -6,7 +6,7 @@ import { DatabaseModule } from '../../database/database.module'
 
 @Module({
   // Vamos a importar el módulo de la base de datos para poder inyectar la conexión
-  imports: [DatabaseModule],
+  imports: [DatabaseModule], // Importamos el módulo de la base de datos, porque vamos a inyectar la conexión de providers
   controllers: [HealthCheckController],
   // Inyectamos el servicio y los providers de la base de datos
   // Uso el spread operator para descomponer el array de providers y que no quede un array de arrays

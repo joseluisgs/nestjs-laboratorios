@@ -9,7 +9,7 @@ const logger = new Logger('HEALTH-CHECK PROVIDER')
 export const databaseProviders = [
   {
     // Este será el nombre que usaré para inyectarme
-    provide: 'POSTGRES_CONNECTION_STATUS',
+    provide: 'POSTGRES_CONNECTION_STATUS', // Nombre con el que lo inyectaré
     useFactory: (connection: DataSource) => {
       try {
         return connection.isInitialized
@@ -18,7 +18,7 @@ export const databaseProviders = [
         return false
       }
     },
-    inject: ['POSTGRES_CONNECTION'], // Inyectamos la conexión a la base de datos y conectamos, es el nombre que le hemos dado en el provider
+    inject: ['POSTGRES_CONNECTION'], // dependencia que inyecta
   },
   {
     provide: 'MONGO_CONNECTION_STATUS',
@@ -30,7 +30,7 @@ export const databaseProviders = [
         return false
       }
     },
-    inject: ['MONGODB_CONNECTION'], // Inyectamos la conexión a la base de datos y conectamos
+    inject: ['MONGODB_CONNECTION'], // dependencia que inyecta
   },
 
 ]
