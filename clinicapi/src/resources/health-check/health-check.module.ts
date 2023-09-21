@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common'
 import { HealthCheckController } from './health-check.controller'
 import { HealthCheckService } from './health-check.service'
 import { databaseProviders } from './providers/database.provider'
-import { DatabaseModule } from '../database/database.module'
+import { DatabaseModule } from '../../database/database.module'
 
 @Module({
   // Vamos a importar el módulo de la base de datos para poder inyectar la conexión
