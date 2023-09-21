@@ -53,8 +53,18 @@ export class PatientsService {
     return patientFound
   }
 
-  update(id: number, updatePatientDto: UpdatePatientDto) {
-    return `This action updates a #${id} patient`
+  async update(id: string, updatePatientDto: UpdatePatientDto) {
+    const patientToUpdate = await this.findOne(id)
+    try {
+      // usamos spread operator para copiar las propiedades de updatePatientDto en patientToUpdate
+      const updatedPatient = { ...patientToUpdate, ...updatePatientDto }
+      await this.patientRepository.update(id, updatedPatient)
+      return updatedPatient
+    } catch (e) {
+      const errorMessage = 'Error al actualizar Paciente en BD con id: ' + id
+      this.logger.error(errorMessage, e)
+      throw new InternalServerErrorException(errorMessage)
+    }
   }
 
   remove(id: number) {

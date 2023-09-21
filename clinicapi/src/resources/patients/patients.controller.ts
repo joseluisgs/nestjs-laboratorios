@@ -34,13 +34,21 @@ export class PatientsController {
       exceptionFactory: () => {
         throw new NotAcceptableException('El id no es válido')
       },
-    })) id: string) {
+    })) id: string,
+  ) {
     return this.patientsService.findOne(id)
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePatientDto: UpdatePatientDto) {
-    return this.patientsService.update(+id, updatePatientDto)
+  update(@Param('id', new ParseUUIDPipe({
+             exceptionFactory: () => {
+               throw new NotAcceptableException('El id no es válido')
+             },
+           }),
+         ) id: string,
+         @Body() updatePatientDto: UpdatePatientDto,
+  ) {
+    return this.patientsService.update(id, updatePatientDto)
   }
 
   @Delete(':id')
