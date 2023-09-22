@@ -5,6 +5,8 @@ import { ValidationPipe } from '@nestjs/common'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
+  // Configuramos el prefijo de la API
+  app.setGlobalPrefix('v1')
   // Configuramos swagger dependiendo del ENV
   if (process.env.NODE_ENV === 'development') {
     const config = new DocumentBuilder()
@@ -23,8 +25,6 @@ async function bootstrap() {
     const document = SwaggerModule.createDocument(app, config)
     SwaggerModule.setup('api', app, document)
   }
-  // Configuramos el prefijo de la API
-  app.setGlobalPrefix('v1')
   // Configuramos el uso de validaciones de pipes de manera global
   app.useGlobalPipes(new ValidationPipe())
   // Lanzamos la aplicación en el puerto indicado en el fichero .env
