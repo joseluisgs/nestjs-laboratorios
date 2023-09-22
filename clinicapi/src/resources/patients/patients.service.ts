@@ -1,8 +1,9 @@
-import { Inject, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common'
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { CreatePatientDto } from './dto/create-patient.dto'
 import { UpdatePatientDto } from './dto/update-patient.dto'
 import { Repository } from 'typeorm'
 import { PatientEntity } from './entities/patient.entity'
+import { DatabaseException } from '../../database/exceptions/database-exception/database-exception'
 
 /**
  * Servicio que se encarga de gestionar los pacientes.
@@ -13,16 +14,15 @@ export class PatientsService {
   private logger = new Logger(PatientsService.name)
 
   constructor(
-    @Inject('PATIENT_REPOSITORY') private readonly patientRepository: Repository<PatientEntity>) {
-  }
+    @Inject('PATIENT_REPOSITORY')
+    private readonly patientRepository: Repository<PatientEntity>,
+  ) {}
 
   async create(createPatientDto: CreatePatientDto) {
     try {
       return await this.patientRepository.save(createPatientDto)
     } catch (e) {
-      const errorMessage = 'Error al crear Paciente en BD'
-      this.logger.error(errorMessage, e)
-      throw new InternalServerErrorException(errorMessage)
+      throw new DatabaseException('Error al crear Paciente en BD', e)
     }
   }
 
@@ -30,9 +30,7 @@ export class PatientsService {
     try {
       return await this.patientRepository.find()
     } catch (e) {
-      const errorMessage = 'Error al obtener Pacientes en BD'
-      this.logger.error(errorMessage, e)
-      throw new InternalServerErrorException(errorMessage)
+      throw new DatabaseException('Error al obtener Pacientes en BD', e)
     }
   }
 
@@ -41,14 +39,13 @@ export class PatientsService {
     try {
       patientFound = await this.patientRepository.findOneBy({ id })
     } catch (e) {
-      const errorMessage = 'Error al obtener Paciente en BD con id: ' + id
-      this.logger.error(errorMessage, e)
-      throw new InternalServerErrorException(errorMessage)
+      throw new DatabaseException(
+        `Error al obtener Paciente en BD con id:${id}`,
+        e,
+      )
     }
     if (!patientFound) {
-      const errorMessage = 'No existe Paciente en BD con id: ' + id
-      this.logger.error(errorMessage)
-      throw new NotFoundException(errorMessage)
+      throw new NotFoundException(`No existe Paciente en BD con id:${id}`)
     }
     return patientFound
   }
@@ -61,9 +58,10 @@ export class PatientsService {
       await this.patientRepository.update(id, updatedPatient)
       return updatedPatient
     } catch (e) {
-      const errorMessage = 'Error al actualizar Paciente en BD con id: ' + id
-      this.logger.error(errorMessage, e)
-      throw new InternalServerErrorException(errorMessage)
+      throw new DatabaseException(
+        `Error al actualizar Paciente en BD con id:${id}`,
+        e,
+      )
     }
   }
 
@@ -72,9 +70,10 @@ export class PatientsService {
     try {
       await this.patientRepository.remove(patientToDelete)
     } catch (e) {
-      const errorMessage = 'Error al eliminar Paciente en BD con id: ' + id
-      this.logger.error(errorMessage, e)
-      throw new InternalServerErrorException(errorMessage)
+      throw new DatabaseException(
+        `Error al eliminar Paciente en BD con id:${id}`,
+        e,
+      )
     }
   }
 }

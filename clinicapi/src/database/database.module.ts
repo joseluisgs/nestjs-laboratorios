@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common'
 import { databaseProviders } from './database.provider'
 
-
 /**
  * Módulo encargado de la conexión con la base de datos
  */
@@ -12,5 +11,4 @@ import { databaseProviders } from './database.provider'
   // Uso el spread operator para descomponer el array de providers y que no quede un array de arrays
   exports: [...databaseProviders], // Los vamos a usar en otro lado
 })
-export class DatabaseModule {
-}
+export class DatabaseModule {}

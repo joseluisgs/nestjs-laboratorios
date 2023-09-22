@@ -12,5 +12,4 @@ import { DatabaseModule } from '../../database/database.module'
   // Uso el spread operator para descomponer el array de providers y que no quede un array de arrays
   providers: [HealthCheckService, ...databaseProviders],
 })
-export class HealthCheckModule {
-}
+export class HealthCheckModule {}

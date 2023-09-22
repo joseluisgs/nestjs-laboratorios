@@ -15,23 +15,25 @@ export const databaseProviders = [
   {
     provide: 'POSTGRES_CONNECTION', // Nombre con el que se inyectará la conexión
     // Inyectamos la conexión a la base de datos y conectamos
-    useFactory: () => new DataSource({
-      type: 'postgres',
-      host: process.env.POSTGRES_DATABASE_HOST,
-      port: Number(process.env.DATABASE_PORT_POSTGRES) || 5432,
-      username: process.env.DATABASE_USER,
-      password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE_NAME,
-      entities: [PatientEntity], // Ponemos las entidades a gestionar por TypeORM
-      synchronize: process.env.NODE_ENV === 'development', // Sincronizar la base de datos si estamos en entorno de desarrollo
-    }).initialize()
-      .then((connection) => {
-        logger.debug('¡🟢 connexion con Postgres realizada con éxito!')
-        return connection
+    useFactory: () =>
+      new DataSource({
+        type: 'postgres',
+        host: process.env.POSTGRES_DATABASE_HOST,
+        port: Number(process.env.DATABASE_PORT_POSTGRES) || 5432,
+        username: process.env.DATABASE_USER,
+        password: process.env.DATABASE_PASSWORD,
+        database: process.env.DATABASE_NAME,
+        entities: [PatientEntity], // Ponemos las entidades a gestionar por TypeORM
+        synchronize: process.env.NODE_ENV === 'development', // Sincronizar la base de datos si estamos en entorno de desarrollo
       })
-      .catch((error) => {
-        logger.error('🔴 error al conectar con Postgres', error)
-      }),
+        .initialize()
+        .then((connection) => {
+          logger.debug('¡🟢 connexion con Postgres realizada con éxito!')
+          return connection
+        })
+        .catch((error) => {
+          logger.error('🔴 error al conectar con Postgres', error)
+        }),
   },
   // Inyectamos la conexión a la base de datos y conectamos
   {

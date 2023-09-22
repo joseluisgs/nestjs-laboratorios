@@ -1,4 +1,13 @@
-import { IsAlpha, IsEmail, IsInt, IsNotEmpty, IsOptional, IsString, Max, Min } from 'class-validator'
+import {
+  IsAlpha,
+  IsEmail,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Max,
+  Min,
+} from 'class-validator'
 
 /**
  * Create patient DTO
@@ -6,11 +15,16 @@ import { IsAlpha, IsEmail, IsInt, IsNotEmpty, IsOptional, IsString, Max, Min } f
  */
 export class CreatePatientDto {
   @IsNotEmpty({ message: 'El nombre es requerido' })
-  @IsAlpha('es-ES', { message: 'El nombre solo puede contener letras, el valor actual es: $value' })
+  @IsAlpha('es-ES', {
+    message: 'El nombre solo puede contener letras, el valor actual es: $value',
+  })
   name: string
 
   @IsNotEmpty({ message: 'El apellidos es requerido' })
-  @IsAlpha('es-ES', { message: 'El apellido solo puede contener letras, el valor actual es: $value' })
+  @IsAlpha('es-ES', {
+    message:
+      'El apellido solo puede contener letras, el valor actual es: $value',
+  })
   lastname: string
 
   @IsNotEmpty({ message: 'El teléfono es requerido' })

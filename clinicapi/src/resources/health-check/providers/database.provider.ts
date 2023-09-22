@@ -14,7 +14,10 @@ export const databaseProviders = [
       try {
         return connection.isInitialized
       } catch (error) {
-        logger.error('error al verificar estado de conexión con Postgres', error)
+        logger.error(
+          'error al verificar estado de conexión con Postgres',
+          error,
+        )
         return false
       }
     },
@@ -32,5 +35,4 @@ export const databaseProviders = [
     },
     inject: ['MONGODB_CONNECTION'], // dependencia que inyecta
   },
-
 ]

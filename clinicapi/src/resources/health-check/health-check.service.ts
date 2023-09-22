@@ -11,12 +11,12 @@ export class HealthCheckService {
    * @param postgresDBConnectionStatus El estado de la conexión de la base de datos Posgres.
    * @param mongoDBConnectionStatus El estado de la conexión de la base de datos MongoDB.
    */
-  constructor(@Inject('POSTGRES_CONNECTION_STATUS') // Nombre del provider que queremos inyectar
-              private readonly postgresDBConnectionStatus: boolean,
-              @Inject('MONGO_CONNECTION_STATUS') // Nombre del provider que queremos inyectar
-              private readonly mongoDBConnectionStatus: boolean,
-  ) {
-  }
+  constructor(
+    @Inject('POSTGRES_CONNECTION_STATUS') // Nombre del provider que queremos inyectar
+    private readonly postgresDBConnectionStatus: boolean,
+    @Inject('MONGO_CONNECTION_STATUS') // Nombre del provider que queremos inyectar
+    private readonly mongoDBConnectionStatus: boolean,
+  ) {}
 
   /**
    * Devolver el estado de la API está bien, pero no incluyas información sensible.
