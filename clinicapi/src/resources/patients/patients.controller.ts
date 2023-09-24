@@ -21,11 +21,11 @@ export class PatientsController {
   @Post()
   @ApiResponse({
     status: 201,
-    description: 'Error interno de la api en bases de datos',
+    description: 'Paciente creado con éxito',
     type: Patient,
   })
   @ApiInternalServerErrorResponse({
-    description: 'Error al crear el paciente',
+    description: 'Error interno de la api en bases de datos',
   })
   create(@Body() createPatientDto: CreatePatientDto) {
     return this.patientsService.create(createPatientDto)

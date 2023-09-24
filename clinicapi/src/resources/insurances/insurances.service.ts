@@ -1,18 +1,21 @@
-import { Inject, Injectable, Logger } from '@nestjs/common'
+import { Inject, Injectable } from '@nestjs/common'
 import { CreateInsuranceDto } from './dto/create-insurance.dto'
 import { UpdateInsuranceDto } from './dto/update-insurance.dto'
 import { Model } from 'mongoose'
 import { Insurance } from './model/insurance.model'
+import { DatabaseException } from '../../database/exceptions/database-exception/database-exception'
 
 @Injectable()
 export class InsurancesService {
-  private logger = new Logger(InsurancesService.name)
-
   constructor(@Inject('INSURANCE_MODEL') private readonly insuranceModel: Model<Insurance>) {
   }
 
-  create(createInsuranceDto: CreateInsuranceDto) {
-    return 'This action adds a new insurance'
+  async create(createInsuranceDto: CreateInsuranceDto) {
+    try {
+      return await this.insuranceModel.create(createInsuranceDto)
+    } catch (error) {
+      throw new DatabaseException('Error al crear Aseguradora en BD', error)
+    }
   }
 
   findAll() {

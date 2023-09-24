@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { CreatePatientDto } from './dto/create-patient.dto'
 import { UpdatePatientDto } from './dto/update-patient.dto'
 import { Repository } from 'typeorm'
@@ -11,26 +11,25 @@ import { DatabaseException } from '../../database/exceptions/database-exception/
  */
 @Injectable()
 export class PatientsService {
-  private logger = new Logger(PatientsService.name)
-
   constructor(
     @Inject('PATIENT_REPOSITORY')
     private readonly patientRepository: Repository<PatientEntity>,
-  ) {}
+  ) {
+  }
 
   async create(createPatientDto: CreatePatientDto) {
     try {
       return await this.patientRepository.save(createPatientDto)
-    } catch (e) {
-      throw new DatabaseException('Error al crear Paciente en BD', e)
+    } catch (error) {
+      throw new DatabaseException('Error al crear Paciente en BD', error)
     }
   }
 
   async findAll() {
     try {
       return await this.patientRepository.find()
-    } catch (e) {
-      throw new DatabaseException('Error al obtener Pacientes en BD', e)
+    } catch (error) {
+      throw new DatabaseException('Error al obtener Pacientes en BD', error)
     }
   }
 
@@ -38,10 +37,10 @@ export class PatientsService {
     let patientFound = null
     try {
       patientFound = await this.patientRepository.findOneBy({ id })
-    } catch (e) {
+    } catch (error) {
       throw new DatabaseException(
         `Error al obtener Paciente en BD con id:${id}`,
-        e,
+        error,
       )
     }
     if (!patientFound) {
@@ -57,10 +56,10 @@ export class PatientsService {
       const updatedPatient = { ...patientToUpdate, ...updatePatientDto }
       await this.patientRepository.update(id, updatedPatient)
       return updatedPatient
-    } catch (e) {
+    } catch (error) {
       throw new DatabaseException(
         `Error al actualizar Paciente en BD con id:${id}`,
-        e,
+        error,
       )
     }
   }
@@ -69,10 +68,10 @@ export class PatientsService {
     const patientToDelete = await this.findOne(id.toString())
     try {
       await this.patientRepository.remove(patientToDelete)
-    } catch (e) {
+    } catch (error) {
       throw new DatabaseException(
         `Error al eliminar Paciente en BD con id:${id}`,
-        e,
+        error,
       )
     }
   }

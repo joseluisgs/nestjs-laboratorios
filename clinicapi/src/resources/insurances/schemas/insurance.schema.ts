@@ -18,4 +18,13 @@ export const InsuranceSchema = new mongoose.Schema({
   },
   collection: 'INSURANCES',
 
+  // Transformación de los datos de la base de datos
+  // En este caso, eliminamos el campo __v y renombramos _id a id para que no se vea en la respuesta
+  toJSON: {
+    transform: (doc: DocumentType, ret) => {
+      delete ret.__v
+      ret.id = ret._id
+      delete ret._id
+    },
+  },
 })
