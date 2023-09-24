@@ -1,8 +1,8 @@
-import { ArgumentMetadata, Injectable, NotAcceptableException, ParseUUIDPipe, PipeTransform } from '@nestjs/common'
-import { Types } from 'mongoose'
+import { ArgumentMetadata, Injectable, NotAcceptableException, PipeTransform } from '@nestjs/common'
+import { isValidObjectId } from 'mongoose'
 
 /**
- * Validador para el id de un paciente, y ahorrar código en el controlador
+ * Validador para elid de un paciente, y ahorrar código en el controlador
  */
 @Injectable()
 export class InsuranceIdValidatorPipe implements PipeTransform {
@@ -12,13 +12,9 @@ export class InsuranceIdValidatorPipe implements PipeTransform {
   }
 
   async transform(insuranceId: string, metadata: ArgumentMetadata) {
-    const uuidPipe = new ParseUUIDPipe()
-
-    const validObjectId = Types.ObjectId.isValid(insuranceId)
-    if (!validObjectId) {
+    if (!isValidObjectId(insuranceId)) {
       throw new NotAcceptableException(this.errorMessage)
     }
-    return Types.ObjectId.createFromHexString(insuranceId)
-
+    return insuranceId
   }
 }
