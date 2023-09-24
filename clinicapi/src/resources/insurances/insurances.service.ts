@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, NotFoundException } from '@nestjs/common'
 import { CreateInsuranceDto } from './dto/create-insurance.dto'
 import { UpdateInsuranceDto } from './dto/update-insurance.dto'
 import { Model } from 'mongoose'
@@ -18,12 +18,28 @@ export class InsurancesService {
     }
   }
 
-  findAll() {
-    return `This action returns all insurances`
+  async findAll() {
+    try {
+      return await this.insuranceModel.find()
+    } catch (error) {
+      throw new DatabaseException('Error al obtener Aseguradoras en BD', error)
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} insurance`
+  async findOne(id: string) {
+    let insuranceFound = null
+    try {
+      insuranceFound = await this.insuranceModel.findById(id)
+    } catch (error) {
+      throw new DatabaseException(
+        `Error al obtener Aseguradora en BD con id:${id}`,
+        error,
+      )
+    }
+    if (!insuranceFound) {
+      throw new NotFoundException(`No existe Aseguradora en BD con id:${id}`)
+    }
+    return insuranceFound
   }
 
   update(id: number, updateInsuranceDto: UpdateInsuranceDto) {
