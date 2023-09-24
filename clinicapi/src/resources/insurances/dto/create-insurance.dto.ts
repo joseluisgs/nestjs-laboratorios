@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString, MaxLength } from 'class-validator'
+import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
 
 /**
@@ -28,7 +28,7 @@ export class CreateInsuranceDto {
   @IsNotEmpty({ message: 'El código postal es obligatorio' })
   @IsString({ message: 'El código postal es inválido' })
   @MaxLength(6, { message: 'El código postal no puede tener más de 6 caracteres' })
-  @MaxLength(4, { message: 'El código postal no puede tener menos de 4 caracteres' })
+  @MinLength(4, { message: 'El código postal no puede tener menos de 4 caracteres' })
   @ApiProperty({ required: true, description: 'Código postal de la aseguradora', example: '12345' })
   readonly postal_code: string
 }

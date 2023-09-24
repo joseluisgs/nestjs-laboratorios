@@ -42,11 +42,21 @@ export class InsurancesService {
     return insuranceFound
   }
 
-  update(id: number, updateInsuranceDto: UpdateInsuranceDto) {
-    return `This action updates a #${id} insurance`
+  async update(id: string, updateInsuranceDto: UpdateInsuranceDto) {
+    const updatedPatient = await this.findOne(id)
+    try {
+      //Le pasamos el id del paciente a actualizar y el objeto con los datos a actualizar
+      // le ponemos el {new:true} para que nos devuelva el objeto actualizado, y no el anterior
+      return await this.insuranceModel.findByIdAndUpdate(id, updateInsuranceDto, { new: true })
+    } catch (error) {
+      throw new DatabaseException(
+        `Error al actualizar Paciente en BD con id:${id}`,
+        error,
+      )
+    }
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return `This action removes a #${id} insurance`
   }
 }

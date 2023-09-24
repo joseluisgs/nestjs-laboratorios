@@ -66,8 +66,24 @@ export class InsurancesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInsuranceDto: UpdateInsuranceDto) {
-    return this.insurancesService.update(+id, updateInsuranceDto)
+  @ApiResponse({
+    status: 200,
+    description: 'Paciente actualizado con éxito',
+    type: Insurance,
+  })
+  @ApiNotFoundResponse({
+    description: 'Aseguradora no encontrada',
+  })
+  @ApiNotAcceptableResponse({
+    description: 'El id de la aseguradora no es válido',
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Error interno de la api en bases de datos',
+  })
+  update(@Param('id', new InsuranceIdValidatorPipe()) id: string,
+         @Body() updateInsuranceDto: UpdateInsuranceDto,
+  ) {
+    return this.insurancesService.update(id, updateInsuranceDto)
   }
 
   @Delete(':id')
