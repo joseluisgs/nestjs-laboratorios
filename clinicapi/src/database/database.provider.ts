@@ -5,6 +5,8 @@ import { PatientEntity } from '../resources/patients/entities/patient.entity'
 
 /**
  * Proveedor encargado de la conexión con la base de datos
+ * Se usa para poder luego inyectarlos, es decir, para poder usarlos en otros módulos
+ * es un array de providers
  */
 
 // Logger
