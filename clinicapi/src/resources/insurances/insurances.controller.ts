@@ -88,7 +88,17 @@ export class InsurancesController {
 
   @Delete(':id')
   @HttpCode(204) // No Content
-  remove(@Param('id') id: string) {
-    return this.insurancesService.remove(+id)
+  @ApiResponse({
+    status: 204,
+    description: 'Aseguradora eliminada con éxito',
+  })
+  @ApiNotFoundResponse({
+    description: 'Aseguradora no encontrado',
+  })
+  @ApiNotAcceptableResponse({
+    description: 'El id de la aseguradora no es válido',
+  })
+  remove(@Param('id', new InsuranceIdValidatorPipe()) id: string) {
+    return this.insurancesService.remove(id)
   }
 }

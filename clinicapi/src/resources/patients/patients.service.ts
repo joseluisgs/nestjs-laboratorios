@@ -34,19 +34,19 @@ export class PatientsService {
   }
 
   async findOne(id: string) {
-    let patientFound = null
+    let patientToFound = null
     try {
-      patientFound = await this.patientRepository.findOneBy({ id })
+      patientToFound = await this.patientRepository.findOneBy({ id })
     } catch (error) {
       throw new DatabaseException(
         `Error al obtener Paciente en BD con id:${id}`,
         error,
       )
     }
-    if (!patientFound) {
+    if (!patientToFound) {
       throw new NotFoundException(`No existe Paciente en BD con id:${id}`)
     }
-    return patientFound
+    return patientToFound
   }
 
   async update(id: string, updatePatientDto: UpdatePatientDto) {
@@ -65,7 +65,7 @@ export class PatientsService {
   }
 
   async remove(id: string) {
-    const patientToDelete = await this.findOne(id.toString())
+    const patientToDelete = await this.findOne(id)
     try {
       await this.patientRepository.remove(patientToDelete)
     } catch (error) {

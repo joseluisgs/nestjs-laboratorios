@@ -27,23 +27,23 @@ export class InsurancesService {
   }
 
   async findOne(id: string) {
-    let insuranceFound = null
+    let insuranceToFound = null
     try {
-      insuranceFound = await this.insuranceModel.findById(id)
+      insuranceToFound = await this.insuranceModel.findById(id)
     } catch (error) {
       throw new DatabaseException(
         `Error al obtener Aseguradora en BD con id:${id}`,
         error,
       )
     }
-    if (!insuranceFound) {
+    if (!insuranceToFound) {
       throw new NotFoundException(`No existe Aseguradora en BD con id:${id}`)
     }
-    return insuranceFound
+    return insuranceToFound
   }
 
   async update(id: string, updateInsuranceDto: UpdateInsuranceDto) {
-    const updatedPatient = await this.findOne(id)
+    const updatedToPatient = await this.findOne(id)
     try {
       //Le pasamos el id del paciente a actualizar y el objeto con los datos a actualizar
       // le ponemos el {new:true} para que nos devuelva el objeto actualizado, y no el anterior
@@ -56,7 +56,15 @@ export class InsurancesService {
     }
   }
 
-  async remove(id: number) {
-    return `This action removes a #${id} insurance`
+  async remove(id: string) {
+    const patientToDelete = await this.findOne(id)
+    try {
+      await this.insuranceModel.findOneAndDelete(patientToDelete)
+    } catch (error) {
+      throw new DatabaseException(
+        `Error al eliminar Paciente en BD con id:${id}`,
+        error,
+      )
+    }
   }
 }
