@@ -836,6 +836,32 @@
 							"response": []
 						},
 						{
+							"name": "Get By Id Copy",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/v1/patients/:id",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"patients",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "63a9e586-09c7-40eb-a9f8-ed46500cfde9"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Create",
 							"request": {
 								"method": "POST",
@@ -918,6 +944,145 @@
 										{
 											"key": "id",
 											"value": "49cfb217-787e-42b8-be22-799ba5813991"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Insurances",
+					"item": [
+						{
+							"name": "GetAll",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/v1/insurances",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"insurances"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By Id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/v1/insurances/:id",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"insurances",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "650a9323b765244ce11b5667"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{$randomCompanyName}}\",\r\n    \"address\": \"{{$randomStreetAddress}}\",\r\n    \"phone\": \"{{$randomPhoneNumber}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"postal_code\": \"1234\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/v1/insurances",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"insurances"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{$randomCompanyName}}\",\r\n    \"address\": \"{{$randomStreetAddress}}\",\r\n    \"phone\": \"{{$randomPhoneNumber}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"postal_code\": \"9999\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/v1/insurances/:id",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"insurances",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "650a9323b765244ce11b5667"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/v1/insurances/:id",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"insurances",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "6510198652ab85b77a0a52f8"
 										}
 									]
 								}
