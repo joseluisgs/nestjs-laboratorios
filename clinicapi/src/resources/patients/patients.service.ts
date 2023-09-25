@@ -72,6 +72,14 @@ export class PatientsService {
     }
   }
 
+  async findAllByInsuranceId(insuranceId: string) {
+    try {
+      return await this.patientRepository.find({ where: { insuranceId: insuranceId } })
+    } catch (error) {
+      throw new DatabaseException(`Error al obtener Pacientes filtrados por insuranceId ${insuranceId} en BD`, error)
+    }
+  }
+
   async update(id: string, updatePatientDto: UpdatePatientDto) {
     const patientToUpdate = await this.findOne(id)
     try {
@@ -81,7 +89,7 @@ export class PatientsService {
       return updatedPatient
     } catch (error) {
       throw new DatabaseException(
-        `Error al actualizar Paciente en BD con id:${id}`,
+        `Error al actualizar Paciente en BD con id: ${id}`,
         error,
       )
     }
@@ -93,7 +101,7 @@ export class PatientsService {
       await this.patientRepository.remove(patientToDelete)
     } catch (error) {
       throw new DatabaseException(
-        `Error al eliminar Paciente en BD con id:${id}`,
+        `Error al eliminar Paciente en BD con id: ${id}`,
         error,
       )
     }

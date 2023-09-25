@@ -64,4 +64,13 @@ export class CreatePatientDto {
     example: 'Calle 123',
   })
   address: string
+
+  @IsOptional()
+  @IsString({ message: 'El id del seguro debe ser un texto' })
+  @ApiProperty({
+    required: false,
+    description: 'Id del seguro del paciente',
+    example: '60f0a9b9e6b3a3b3e0a3e0a3',
+  })
+  insuranceId: string
 }

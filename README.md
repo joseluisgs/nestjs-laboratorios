@@ -24,6 +24,7 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
   - [Pipes](#pipes)
       - [Validaciones de Pipe](#validaciones-de-pipe)
   - [Validaciones](#validaciones)
+  - [Guards](#guards)
   - [Logging](#logging)
   - [Bases de Datos](#bases-de-datos)
     - [Ejemplo con PostgreSQL](#ejemplo-con-postgresql)
@@ -441,6 +442,30 @@ export class CreateUserDto {
 
 // Al usar un tipo parcial, obtenemos lo que hemos ya implementado con anotaciones.
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
+```
+
+## Guards
+Un [guard](https://docs.nestjs.com/guards) en Nest.js es un middleware encargado de procesar la ruta si se cumple determinadas condiciones. se suele usar sobre todo en Autenticaciones y Autorizaciones. Es un middleware de solo ida, es decir, no implementa nada sobre la vuelta. Por eso hace uso de CanActivate, que devuelve un booleano. Si devuelve true, se ejecuta la ruta, si devuelve false, no se ejecuta.
+```ts
+@Injectable()
+export class RolesGuard implements CanActivate {
+  constructor(private reflector: Reflector) {}
+
+  canActivate(context: ExecutionContext): boolean {
+    const roles = this.reflector.get(Roles, context.getHandler());
+    if (!roles) {
+      return true;
+    }
+    const request = context.switchToHttp().getRequest();
+    const user = request.user;
+    return matchRoles(roles, user.roles);
+  }
+}
+```
+
+Luego podemos usarlo en el controlador con el decorador @UseGuards
+```ts
+@UseGuards(RolesGuard)
 ```
 
 ## Logging

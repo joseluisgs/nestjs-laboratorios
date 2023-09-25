@@ -55,5 +55,13 @@ export class UpdatePatientDto extends PartialType(CreatePatientDto) {
     example: 'Calle 123',
   })
   address: string
+
+  @IsOptional()
+  @ApiProperty({
+    required: false,
+    description: 'Id de la aseguradora del paciente',
+    example: '60f0a1b9e6b3a3b3b4f5e0b3',
+  })
+  insuranceId: string
 }
 

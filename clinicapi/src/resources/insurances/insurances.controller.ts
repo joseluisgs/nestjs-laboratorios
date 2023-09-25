@@ -11,12 +11,15 @@ import {
 } from '@nestjs/swagger'
 import { Insurance } from './model/insurance.model'
 import { InsuranceIdValidatorPipe } from './pipes/Insurance-id-validator.pipe'
+import { Patient } from '../patients/model/patient.model'
 
 
 @Controller('insurances')
 @ApiTags('Insurances')
 export class InsurancesController {
-  constructor(private readonly insurancesService: InsurancesService) {
+  constructor(
+    private readonly insurancesService: InsurancesService,
+  ) {
   }
 
   @Post()
@@ -32,7 +35,6 @@ export class InsurancesController {
     return this.insurancesService.create(createInsuranceDto)
   }
 
-  @Get()
   @Get()
   @ApiResponse({
     status: 200,
@@ -63,6 +65,25 @@ export class InsurancesController {
   })
   findOne(@Param('id', new InsuranceIdValidatorPipe()) id: string) {
     return this.insurancesService.findOne(id)
+  }
+
+  @Get(':id/patients')
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de pacientes de la aseguradora',
+    type: [Patient],
+  })
+  @ApiNotFoundResponse({
+    description: 'Aseguradora no encontrada',
+  })
+  @ApiNotAcceptableResponse({
+    description: 'El id de la aseguradora no es válido',
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Error interno de la api en bases de datos',
+  })
+  findPatientsByInsuranceId(@Param('id', new InsuranceIdValidatorPipe()) id: string) {
+    return this.insurancesService.findPatientsByInsuranceId(id)
   }
 
   @Patch(':id')

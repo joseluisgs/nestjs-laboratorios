@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query, UseGuards } from '@nestjs/common'
 import { PatientsService } from './patients.service'
 import { CreatePatientDto } from './dto/create-patient.dto'
 import { UpdatePatientDto } from './dto/update-patient.dto'
 import { PatientIdValidatorPipe } from './pipes/patient-id-validator.pipe'
 import {
+  ApiBadRequestResponse,
   ApiInternalServerErrorResponse,
   ApiNotAcceptableResponse,
   ApiNotFoundResponse,
@@ -11,6 +12,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger'
 import { Patient } from './model/patient.model'
+import { InsuranceVerificationGuard } from './guards/insurance-verification.guard'
 
 
 @Controller('patients')
@@ -20,6 +22,7 @@ export class PatientsController {
   }
 
   @Post()
+  @UseGuards(InsuranceVerificationGuard)
   @ApiResponse({
     status: 201,
     description: 'Paciente creado con éxito',
@@ -27,6 +30,9 @@ export class PatientsController {
   })
   @ApiInternalServerErrorResponse({
     description: 'Error interno de la api en bases de datos',
+  })
+  @ApiBadRequestResponse({
+    description: 'El id del seguro no es válido',
   })
   create(@Body() createPatientDto: CreatePatientDto) {
     return this.patientsService.create(createPatientDto)
@@ -74,6 +80,7 @@ export class PatientsController {
   }
 
   @Patch(':id')
+  @UseGuards(InsuranceVerificationGuard)
   @ApiResponse({
     status: 200,
     description: 'Paciente actualizado con éxito',
@@ -87,6 +94,9 @@ export class PatientsController {
   })
   @ApiInternalServerErrorResponse({
     description: 'Error interno de la api en bases de datos',
+  })
+  @ApiBadRequestResponse({
+    description: 'El id del seguro no es válido',
   })
   update(
     @Param('id', new PatientIdValidatorPipe()) id: string,

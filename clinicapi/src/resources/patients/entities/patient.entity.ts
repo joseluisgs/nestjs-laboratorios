@@ -33,4 +33,8 @@ export class PatientEntity {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date
+
+  // Vamos a hacer una relación entre la tabla PATIENTS de Postgres y la tabla INSURANCES de MongoDB
+  @Column('varchar', { name: 'insurance_id', nullable: true, default: null })
+  insuranceId: string
 }

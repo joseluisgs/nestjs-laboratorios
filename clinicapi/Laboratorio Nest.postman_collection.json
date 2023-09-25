@@ -810,25 +810,24 @@
 							"response": []
 						},
 						{
-							"name": "Get By Id",
+							"name": "GetAll By Name",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "localhost:3000/v1/patients/:id",
+									"raw": "localhost:3000/v1/patients?name=St",
 									"host": [
 										"localhost"
 									],
 									"port": "3000",
 									"path": [
 										"v1",
-										"patients",
-										":id"
+										"patients"
 									],
-									"variable": [
+									"query": [
 										{
-											"key": "id",
-											"value": "63a9e586-09c7-40eb-a9f8-ed46500cfde9"
+											"key": "name",
+											"value": "St"
 										}
 									]
 								}
@@ -836,7 +835,32 @@
 							"response": []
 						},
 						{
-							"name": "Get By Id Copy",
+							"name": "GetAll By Lastname",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/v1/patients?lastname=Schm",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"patients"
+									],
+									"query": [
+										{
+											"key": "lastname",
+											"value": "Schm"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By Id",
 							"request": {
 								"method": "GET",
 								"header": [],
@@ -869,6 +893,34 @@
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n    \"name\": \"{{$randomFirstName}}\",\r\n    \"lastname\": \"{{$randomLastName}}\",\r\n    \"phone\": \"{{$randomPhoneNumber}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"age\": 36,\r\n    \"address\": \"Casa de la colina\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3000/v1/patients",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"patients"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create con Seguro",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{$randomFirstName}}\",\r\n    \"lastname\": \"{{$randomLastName}}\",\r\n    \"phone\": \"{{$randomPhoneNumber}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"age\": 36,\r\n    \"address\": \"Casa de la colina\",\r\n    \"insuranceId\": \"650a9323b765244ce11b5667\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -989,6 +1041,33 @@
 										"v1",
 										"insurances",
 										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "650a9323b765244ce11b5667"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Pacientes por Aseguradora",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/v1/insurances/:id/patients",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"insurances",
+										":id",
+										"patients"
 									],
 									"variable": [
 										{
