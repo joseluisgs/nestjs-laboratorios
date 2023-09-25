@@ -3,6 +3,7 @@ import { InsurancesService } from './insurances.service'
 import { CreateInsuranceDto } from './dto/create-insurance.dto'
 import { UpdateInsuranceDto } from './dto/update-insurance.dto'
 import {
+  ApiBasicAuth,
   ApiInternalServerErrorResponse,
   ApiNotAcceptableResponse,
   ApiNotFoundResponse,
@@ -18,6 +19,7 @@ import { AuthGuard } from '@nestjs/passport'
 @Controller('insurances')
 @UseGuards(AuthGuard('basic')) // Usamos el guard de Basic Auth en este controlador y todos los métodos
 @ApiTags('Insurances')
+@ApiBasicAuth() // Añadimos el Basic Auth en la documentación de Swagger
 export class InsurancesController {
   constructor(
     private readonly insurancesService: InsurancesService,

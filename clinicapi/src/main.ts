@@ -13,6 +13,7 @@ async function bootstrap() {
       .setTitle('Clinic API') // Título de la API
       .setDescription('Clinic REST API') // Descripción de la API
       .setVersion('1.0') // Versión de la API
+      .setContact('JLGS', 'https://github.com/joseluisgs', '')
       // Tags a los que pertenecen los endpoints
       .addTag(
         'HealthCheck',
@@ -20,6 +21,8 @@ async function bootstrap() {
       )
       .addTag('Patients', 'Endpoints del recurso pacientes')
       .addTag('Insurances', 'Endpoints del recurso aseguradoras')
+      // Añadimos la seguridad de Basic Auth
+      .addBasicAuth()
       .build()
     // Generamos la documentación de Swagger
     const document = SwaggerModule.createDocument(app, config)

@@ -5,9 +5,11 @@ import { UpdatePatientDto } from './dto/update-patient.dto'
 import { PatientIdValidatorPipe } from './pipes/patient-id-validator.pipe'
 import {
   ApiBadRequestResponse,
+  ApiBasicAuth,
   ApiInternalServerErrorResponse,
   ApiNotAcceptableResponse,
   ApiNotFoundResponse,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger'
@@ -19,6 +21,7 @@ import { AuthGuard } from '@nestjs/passport'
 @Controller('patients')
 @UseGuards(AuthGuard('basic')) // Usamos el guard de Basic Auth en este controlador y todos los métodos
 @ApiTags('Patients')
+@ApiBasicAuth() // Añadimos el Basic Auth en la documentación de Swagger
 export class PatientsController {
   constructor(private readonly patientsService: PatientsService) {
   }
@@ -45,6 +48,14 @@ export class PatientsController {
     status: 200,
     description: 'Lista de pacientes',
     type: [Patient],
+  })
+  @ApiQuery({
+    name: 'name',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'lastname',
+    required: false,
   })
   @ApiInternalServerErrorResponse({
     description: 'Error interno de la api en bases de datos',
