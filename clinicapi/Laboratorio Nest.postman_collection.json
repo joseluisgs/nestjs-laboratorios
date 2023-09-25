@@ -979,6 +979,21 @@
 						{
 							"name": "Delete",
 							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "clinicpass",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "clinicuser",
+											"type": "string"
+										}
+									]
+								},
 								"method": "DELETE",
 								"header": [],
 								"url": {
@@ -1169,6 +1184,41 @@
 							"response": []
 						}
 					]
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "username",
+						"value": "clinicuser",
+						"type": "string"
+					},
+					{
+						"key": "password",
+						"value": "clinicpass",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		}
