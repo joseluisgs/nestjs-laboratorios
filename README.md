@@ -25,6 +25,8 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
       - [Validaciones de Pipe](#validaciones-de-pipe)
   - [Validaciones](#validaciones)
   - [Guards](#guards)
+  - [Autenticación y Autorización](#autenticación-y-autorización)
+    - [Autenticación básica](#autenticación-básica)
   - [Logging](#logging)
   - [Bases de Datos](#bases-de-datos)
     - [Ejemplo con PostgreSQL](#ejemplo-con-postgresql)
@@ -467,6 +469,53 @@ Luego podemos usarlo en el controlador con el decorador @UseGuards
 ```ts
 @UseGuards(RolesGuard)
 ```
+
+## Autenticación y Autorización
+
+### Autenticación básica
+Para realizar la [autenticación](https://docs.nestjs.com/security/authentication) y/o autorización podemos usar [Passport](https://docs.nestjs.com/recipes/passport).
+
+Podemos elegir el tipo de autorización, por ejemplo básica por http.
+
+Los instalamos como:
+```bash
+npm install --save @nestjs/passport passport passport-http
+```
+
+Podemos crearnos un modulo auth y un provider de autenticación, por ejemplo para básico
+``` ts
+@Injectable()
+export class BasicAuthStrategy extends PassportStrategy(BasicStrategy) {
+  constructor() {
+    // Le decimos que los datos de la petición que vienen del Header se los pase al callback
+    super({ passReqToCallback: true })
+  }
+
+  /**
+   * Método que valida las credenciales de la petición cuando es de tipo Basic Auth
+   * @param req
+   * @param username
+   * @param password
+   */
+  public validate = async (
+    req: Request,
+    username: string,
+    password: string,
+  ) => {
+    // Las credenciales vienen en el header de la petición y las comparamos con las que tenemos en el .env
+    if (
+      process.env.API_USER === username &&
+      process.env.API_PASS === password
+    ) {
+      return true
+    }
+    throw new UnauthorizedException('Credenciales invalidas')
+  }
+}
+```
+
+Ahora podemos hacer uso de él con el decorador `@UseGuards(AuthGuard('basic'))` tanto a nivel de controlador como a nivel de método, según nos interese. 
+
 
 ## Logging
 Podemos usar logs personalizados para nuestra aplicación.

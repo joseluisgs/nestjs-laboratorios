@@ -13,9 +13,11 @@ import {
 } from '@nestjs/swagger'
 import { Patient } from './model/patient.model'
 import { InsuranceVerificationGuard } from './guards/insurance-verification.guard'
+import { AuthGuard } from '@nestjs/passport'
 
 
 @Controller('patients')
+@UseGuards(AuthGuard('basic')) // Usamos el guard de Basic Auth en este controlador y todos los métodos
 @ApiTags('Patients')
 export class PatientsController {
   constructor(private readonly patientsService: PatientsService) {
@@ -106,6 +108,7 @@ export class PatientsController {
   }
 
   @Delete(':id')
+  // @UseGuards(AuthGuard('basic')) // Usamos el guard de Basic Auth en este método
   @HttpCode(204) // No Content
   @ApiResponse({
     status: 204,
