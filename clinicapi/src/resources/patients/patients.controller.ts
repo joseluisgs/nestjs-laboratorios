@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query } from '@nestjs/common'
 import { PatientsService } from './patients.service'
 import { CreatePatientDto } from './dto/create-patient.dto'
 import { UpdatePatientDto } from './dto/update-patient.dto'
@@ -11,6 +11,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger'
 import { Patient } from './model/patient.model'
+
 
 @Controller('patients')
 @ApiTags('Patients')
@@ -40,7 +41,16 @@ export class PatientsController {
   @ApiInternalServerErrorResponse({
     description: 'Error interno de la api en bases de datos',
   })
-  findAll() {
+  findAll(
+    @Query('name') patientName?: string,
+    @Query('lastname') patientLastName?: string,
+  ) {
+    if (patientName) {
+      return this.patientsService.findAllFilteredByName(patientName)
+    }
+    if (patientLastName) {
+      return this.patientsService.findAllFilteredByQueryParams('lastname', patientLastName)
+    }
     return this.patientsService.findAll()
   }
 
