@@ -1,0 +1,9 @@
+# Ignoramos los archivos que no queremos que se copien en la imagen de Docker
+/dist
+/database
+/coverage
+/node_modules
+/test
+.env
+.local.env
+.dockerignore

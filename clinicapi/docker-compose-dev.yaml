@@ -1,0 +1,68 @@
+version: '3.1'
+services:
+  # Esta es nuestra api cogida del dockerfile por eso hace la última
+  clinic_api:
+    image: clinic-api:latest
+    # Si no la encuentra la crea
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:${API_PORT}
+    # Fichero de variables de entorno
+    env_file: .docker.env
+    # redes a las que se conecta
+    networks:
+      - postgres_db_net
+      - mongo_db_net
+    # dependencias (no se inicia si no están)
+    depends_on:
+      - postgres
+      - mongo
+
+    # Esta es BBDD de Postgres
+  postgres:
+    image: postgres:14
+    # Nombre del host para conectarnos
+    hostname: CLINIC_DB_POSTGRES
+    restart: always
+    env_file: .docker.env
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+    ports:
+      - ${POSTGRES_PORT}:5432
+    networks:
+      - postgres_db_net
+    # Volumen para inicializar la base de datos
+    # volumes:
+    # - ./database/postgres/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+
+    # Esta es BBDD de Mongo
+  mongo:
+    image: mongo:5.0
+    hostname: CLINIC_DB_MONGO
+    restart: always
+    env_file: .docker.env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DATABASE_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DATABASE_PASSWORD}
+      - MONGO_INITDB_DATABASE=${DATABASE_NAME}
+    ports:
+      - ${MONGO_PORT}:27017
+    networks:
+      - mongo_db_net
+    # Volumen para inicializar la base de datos
+    volumes:
+      - ./database/mongo/init-db.js:/docker-entrypoint-initdb.d/init-db.js:ro
+
+# Redes para conectar los contenedores
+networks:
+  mongo_db_net:
+    name: 'mongo_db_network'
+    driver: 'bridge'
+
+  postgres_db_net:
+    name: 'postgres_db_network'
+    driver: 'bridge'
