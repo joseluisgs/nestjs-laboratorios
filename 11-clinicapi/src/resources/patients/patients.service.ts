@@ -14,8 +14,7 @@ export class PatientsService {
   constructor(
     @Inject('PATIENT_REPOSITORY')
     private readonly patientRepository: Repository<PatientEntity>,
-  ) {
-  }
+  ) {}
 
   async create(createPatientDto: CreatePatientDto) {
     try {
@@ -53,30 +52,43 @@ export class PatientsService {
     try {
       // return await this.patientRepository.find({ where: { name: patientName } })
       // Usamos QueryBuilder para hacer una consulta más compleja
-      return await this.patientRepository.createQueryBuilder('patient')
+      return await this.patientRepository
+        .createQueryBuilder('patient')
         .where('patient.name LIKE :name', { name: `%${patientName}%` })
         .getMany()
     } catch (error) {
-      throw new DatabaseException(`Error al obtener Pacientes filtrados por nombre ${patientName} en BD`, error)
+      throw new DatabaseException(
+        `Error al obtener Pacientes filtrados por nombre ${patientName} en BD`,
+        error,
+      )
     }
   }
 
   async findAllFilteredByQueryParams(query: string, value: string) {
     try {
       // Creamos una consulta dinámica en base a los parámetros de la petición
-      return await this.patientRepository.createQueryBuilder('patient')
+      return await this.patientRepository
+        .createQueryBuilder('patient')
         .where(`patient.${query} LIKE :value`, { value: `%${value}%` })
         .getMany()
     } catch (error) {
-      throw new DatabaseException(`Error al obtener Pacientes filtrados en BD con ${query}='${value}'`, error)
+      throw new DatabaseException(
+        `Error al obtener Pacientes filtrados en BD con ${query}='${value}'`,
+        error,
+      )
     }
   }
 
   async findAllByInsuranceId(insuranceId: string) {
     try {
-      return await this.patientRepository.find({ where: { insuranceId: insuranceId } })
+      return await this.patientRepository.find({
+        where: { insuranceId: insuranceId },
+      })
     } catch (error) {
-      throw new DatabaseException(`Error al obtener Pacientes filtrados por insuranceId ${insuranceId} en BD`, error)
+      throw new DatabaseException(
+        `Error al obtener Pacientes filtrados por insuranceId ${insuranceId} en BD`,
+        error,
+      )
     }
   }
 
