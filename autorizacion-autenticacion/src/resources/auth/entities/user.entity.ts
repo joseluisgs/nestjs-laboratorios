@@ -38,6 +38,7 @@ export class UserEntity {
     name: 'created_at',
     type: 'timestamp',
     nullable: false,
+    default: () => 'CURRENT_TIMESTAMP', // Valor por defecto: la fecha y hora actual
   })
   createdAt: Date
 
@@ -45,6 +46,8 @@ export class UserEntity {
     name: 'updated_at',
     type: 'timestamp',
     nullable: false,
+    onUpdate: 'CURRENT_TIMESTAMP',
+    default: () => 'CURRENT_TIMESTAMP', // Valor por defecto: la fecha y hora actual
   })
   updatedAt: Date
 }
