@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { ResourcesModule } from './resources/resources.module'
 import { ConfigModule } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { SharedModule } from './shared/shared.module'
 
 /**
  * Modulo principal de la aplicacion
@@ -18,13 +19,14 @@ import { TypeOrmModule } from '@nestjs/typeorm'
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'], // se cargan todas las entidades de la base de datos
+      entities: [`${__dirname}/**/*.entity{.ts,.js}`], // se cargan todas las entidades de la base de datos
       autoLoadEntities: true, // si no se especifica, se carga todas las entidades de la base de datos
-      synchronize: process.env.NODE_ENV === 'development' ? true: false, // si ha cambia el modelo, se sincroniza con la base de datos
-      logging: process.env.NODE_ENV === 'development' ? 'all': false // si esta en modo desarrollo, se muestra los logs
+      synchronize: process.env.NODE_ENV === 'development' ? true : false, // si ha cambia el modelo, se sincroniza con la base de datos
+      logging: process.env.NODE_ENV === 'development' ? 'all' : false, // si esta en modo desarrollo, se muestra los logs
     }),
-    ResourcesModule],
-
+    ResourcesModule,
+    SharedModule,
+  ],
 
   controllers: [],
   providers: [],
