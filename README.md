@@ -27,6 +27,7 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
   - [Guards](#guards)
   - [Autenticación y Autorización](#autenticación-y-autorización)
     - [Autenticación básica](#autenticación-básica)
+    - [Autenticación con JWT](#autenticación-con-jwt)
   - [Logging](#logging)
   - [Bases de Datos](#bases-de-datos)
     - [Ejemplo con PostgreSQL](#ejemplo-con-postgresql)
@@ -516,6 +517,63 @@ export class BasicAuthStrategy extends PassportStrategy(BasicStrategy) {
 ```
 
 Ahora podemos hacer uso de él con el decorador `@UseGuards(AuthGuard('basic'))` tanto a nivel de controlador como a nivel de método, según nos interese. 
+
+### Autenticación con JWT
+Lo primero que debemos hacer es instalar el paquete para trabajar con [Nest.js y JWT](https://docs.nestjs.com/security/authentication#jwt-token), para ello instalamos:
+```bash
+npm install --save @nestjs/jwt
+```
+
+Podemos tener un fichero de constantes para la configuración de la autenticación con JWT, o importar esos valores del fichero de configuración .env
+```ts
+export const jwtConstants = {
+  secret: 'secret',
+  signOptions: { expiresIn: '1d' },
+}
+```
+
+También podemos usar certificados con JWT usando OpenSSL:
+```bash
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout key.pem -out cert.pem
+```
+
+Importamos JWP en nuestro módulo principal
+```ts
+@Module({
+  imports: [
+    // Importamos el modulo de TypeOrm para tener el Repositorio de UserEntity
+    TypeOrmModule.forFeature([UserEntity]),
+    JwtModule.register({
+      secret:
+        process.env.TOKEN_SECRET ||
+        'Me_Gustan_Los_Pepinos_De_Leganes_Porque_Son_Grandes_Y_Hermosos',
+      signOptions: {
+        expiresIn: Number(process.env.TOKEN_EXPIRES) || 3600, // Tiempo de expiracion
+        algorithm: 'HS512', // Algoritmo de encriptacion
+      },
+    }),
+  ],
+  controllers: [AuthController],
+  providers: [AuthService, BcryptService],
+})
+export class AuthModule {}
+
+```
+
+Luego en nuestro servicio podemos importar el servicio de JWT y usarlo
+```ts
+@Injectable()
+export class AuthService {
+  constructor(private jwtService: JwtService) {}
+
+  async login(user: User) {
+    const payload = { username: user.username, sub: user.id };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
+  }
+}
+```
 
 
 ## Logging

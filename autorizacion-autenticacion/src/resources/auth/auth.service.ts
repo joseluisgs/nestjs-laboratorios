@@ -11,6 +11,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { UserSignInDto } from './dto/user-sign.in.dto'
 import { UserSignUpDto } from './dto/user-sign.up.dto'
 import { BcryptService } from 'src/shared/services/bcrypt/bcrypt.service'
+import { JwtService } from '@nestjs/jwt'
 
 @Injectable()
 export class AuthService {
@@ -20,6 +21,7 @@ export class AuthService {
     @InjectRepository(UserEntity)
     private readonly authRepository: Repository<UserEntity>,
     private readonly bcryptService: BcryptService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async singIn(userSignInDto: UserSignInDto) {
@@ -42,11 +44,7 @@ export class AuthService {
     }
     // Poedemos devolver el usuario completo o parte de el
     // return userFound
-    return {
-      id: userFound.id,
-      username: userFound.username,
-      email: userFound.email,
-    }
+    return this.getAccessToken(userFound)
   }
 
   async singUp(userSignUpDto: UserSignUpDto) {
@@ -72,10 +70,11 @@ export class AuthService {
     }
 
     try {
-      return await this.authRepository.save({
+      const userCreated = await this.authRepository.save({
         ...userSignUpDto,
         password: passwordHash,
       })
+      return this.getAccessToken(userCreated)
     } catch (error) {
       this.logger.error(error)
       throw new InternalServerErrorException('Error al guardar el usuario')
@@ -101,6 +100,23 @@ export class AuthService {
       throw new InternalServerErrorException(
         `Error al buscar el usuario por email ${email}`,
       )
+    }
+  }
+
+  private getAccessToken(user: UserEntity) {
+    try {
+      const payload = {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      }
+      const access_token = this.jwtService.sign(payload)
+      return {
+        access_token,
+      }
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException('Error al generar el token')
     }
   }
 }
