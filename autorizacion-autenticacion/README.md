@@ -71,3 +71,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## Socket
+Un socket es un canal de comunicación que permite la transferencia de datos entre el cliente y el Servidor.
+En JavaScript, el socket es un objeto que representa el canal de comunicación entre el cliente y el servidor.

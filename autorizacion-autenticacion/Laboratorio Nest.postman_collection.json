@@ -1226,7 +1226,7 @@
 			"name": "Autenticacion-Autorizacion",
 			"item": [
 				{
-					"name": "Sign In",
+					"name": "Sign Up",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -1249,6 +1249,35 @@
 								"v1",
 								"auth",
 								"sign-up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign In",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@gmail.com\",\r\n    \"password\": \"Superpassword123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/v1/auth/sign-in",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"auth",
+								"sign-in"
 							]
 						}
 					},

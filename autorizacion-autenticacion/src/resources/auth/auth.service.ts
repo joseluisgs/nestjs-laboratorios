@@ -3,19 +3,19 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
-  NotImplementedException,
+  NotFoundException,
 } from '@nestjs/common'
 import { UserEntity } from './entities/user.entity'
 import { Repository } from 'typeorm/repository/Repository'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserSignInDto } from './dto/user-sign.in.dto'
 import { UserSignUpDto } from './dto/user-sign.up.dto'
-import * as bcrypt from 'bcrypt'
 import { BcryptService } from 'src/shared/services/bcrypt/bcrypt.service'
 
 @Injectable()
 export class AuthService {
   private logger = new Logger(AuthService.name)
+
   constructor(
     @InjectRepository(UserEntity)
     private readonly authRepository: Repository<UserEntity>,
@@ -23,7 +23,30 @@ export class AuthService {
   ) {}
 
   async singIn(userSignInDto: UserSignInDto) {
-    throw new NotImplementedException('Not Implemented Yet!')
+    const userFound = await this.findByEmail(userSignInDto.email)
+    if (!userFound) {
+      throw new NotFoundException('No existe un usuario con ese email')
+    }
+    let passwordMatch = false
+    try {
+      passwordMatch = await this.bcryptService.isMatch(
+        userSignInDto.password,
+        userFound.password,
+      )
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException('Error al comprobar password')
+    }
+    if (!passwordMatch) {
+      throw new BadRequestException('Contraseña incorrecta')
+    }
+    // Poedemos devolver el usuario completo o parte de el
+    // return userFound
+    return {
+      id: userFound.id,
+      username: userFound.username,
+      email: userFound.email,
+    }
   }
 
   async singUp(userSignUpDto: UserSignUpDto) {

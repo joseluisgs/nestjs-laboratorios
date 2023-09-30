@@ -38,6 +38,7 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
     - [Testing E2E](#testing-e2e)
     - [Testing Coverage](#testing-coverage)
   - [Documentación con Swagger](#documentación-con-swagger)
+  - [JWT](#jwt)
   - [Autor](#autor)
     - [Contacto](#contacto)
   - [Licencia de uso](#licencia-de-uso)
@@ -1088,6 +1089,8 @@ bootstrap()
 ```
 
 A partir de este momento podemos documentar usando decoradores.
+
+## JWT
 
 
 ## Autor
