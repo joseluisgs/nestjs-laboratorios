@@ -43,7 +43,6 @@ export class RoleEntity {
   })
   updatedAt: Date
 
-  // Relacion 1:N con usuer, un rol puede tener muchos usuarios, pero un usuario puede tener muchos roles
   @OneToMany(() => UserEntity, (user) => user.role)
-  user: UserEntity
+  users: UserEntity[]
 }

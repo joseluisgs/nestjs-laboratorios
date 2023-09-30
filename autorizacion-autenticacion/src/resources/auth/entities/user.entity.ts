@@ -58,8 +58,7 @@ export class UserEntity {
   })
   updatedAt: Date
 
-  // Relacion M:1 con role, un usuario tiene un rol, un rol puede tener muchos usuarios
-  @ManyToOne(() => RoleEntity, (role) => role.user)
+  @ManyToOne(() => RoleEntity, (role) => role.users)
   @JoinColumn({
     name: 'role_id',
     referencedColumnName: 'id',

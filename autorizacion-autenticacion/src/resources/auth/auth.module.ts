@@ -6,11 +6,12 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { BcryptService } from 'src/shared/services/bcrypt/bcrypt.service'
 import { JwtModule } from '@nestjs/jwt'
 import * as process from 'process'
+import { RoleEntity } from './entities/role.entity'
 
 @Module({
   imports: [
-    // Importamos el modulo de TypeOrm para tener el Repositorio de UserEntity
-    TypeOrmModule.forFeature([UserEntity]),
+    // Importamos el modulo de TypeOrm para tener el Repositorio de UserEntity y RoleEntity
+    TypeOrmModule.forFeature([UserEntity, RoleEntity]),
     JwtModule.register({
       // Lo voy a poner en base64
       secret: Buffer.from(

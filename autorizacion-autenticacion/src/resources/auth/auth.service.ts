@@ -12,6 +12,7 @@ import { UserSignInDto } from './dto/user-sign.in.dto'
 import { UserSignUpDto } from './dto/user-sign.up.dto'
 import { BcryptService } from 'src/shared/services/bcrypt/bcrypt.service'
 import { JwtService } from '@nestjs/jwt'
+import { RoleEntity } from './entities/role.entity'
 
 @Injectable()
 export class AuthService {
@@ -22,9 +23,12 @@ export class AuthService {
     private readonly authRepository: Repository<UserEntity>,
     private readonly bcryptService: BcryptService,
     private readonly jwtService: JwtService,
+    @InjectRepository(RoleEntity)
+    private readonly roleRepository: Repository<RoleEntity>,
   ) {}
 
   async singIn(userSignInDto: UserSignInDto) {
+    // OJO cuando reuperemos debemos traernos el rol y hay que hacer un left join
     const userFound = await this.findByEmail(userSignInDto.email)
     if (!userFound) {
       throw new NotFoundException('No existe un usuario con ese email')
@@ -69,10 +73,13 @@ export class AuthService {
       throw new InternalServerErrorException('Error hashing password')
     }
 
+    const defaultRole = await this.findDefaultRole()
+
     try {
       const userCreated = await this.authRepository.save({
         ...userSignUpDto,
         password: passwordHash,
+        role: defaultRole,
       })
       return this.getAccessToken(userCreated)
     } catch (error) {
@@ -94,7 +101,14 @@ export class AuthService {
 
   async findByEmail(email: string) {
     try {
-      return await this.authRepository.findOneBy({ email: email })
+      // Esto no vale porque no hace el left join
+      // return await this.authRepository.findOneBy({ email: email })
+
+      return await this.authRepository
+        .createQueryBuilder('USERS') // Crea una consulta
+        .leftJoinAndSelect('USERS.role', 'role') // Trae el rol
+        .where('USERS.email = :email', { email }) // Filtra por email
+        .getOne() // Devuelve el usuario
     } catch (error) {
       this.logger.error(error)
       throw new InternalServerErrorException(
@@ -109,7 +123,9 @@ export class AuthService {
         id: user.id,
         username: user.username,
         email: user.email,
+        role: user.role.name,
       }
+      //console.log(payload)
       const access_token = this.jwtService.sign(payload)
       return {
         access_token,
@@ -117,6 +133,26 @@ export class AuthService {
     } catch (error) {
       this.logger.error(error)
       throw new InternalServerErrorException('Error al generar el token')
+    }
+  }
+
+  private async findDefaultRole(defaultRole: string = 'USER') {
+    try {
+      return await this.roleRepository.findOneBy({ name: defaultRole })
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException(
+        'Error al buscar el rol por defecto',
+      )
+    }
+  }
+
+  private async findRoleBy(id: string) {
+    try {
+      return await this.roleRepository.findOneBy({ id: id })
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException('Error al buscar el usuario')
     }
   }
 }
