@@ -575,6 +575,49 @@ export class AuthService {
 }
 ```
 
+Para la autorización podemos hacer unos guard con Passport y usar el decorador `@UseGuards(AuthGuard('jwt'))`. Para ello debemos instalar:
+```bash
+npm install --save @nestjs/passport passport-jwt
+npm install --D @types/passport-jwt
+```
+
+El siguiente paso es crear la estrategua de autenticación con JWT
+```ts
+@Injectable()
+export class JwtStrategy extends PassportStrategy(Strategy) {
+  constructor(private readonly authService: AuthService) {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: jwtConstants.secret,
+    })
+  }
+
+  async validate(payload: any) {
+    const user = await this.authService.validateUser(payload)
+    if (!user) {
+      throw new UnauthorizedException()
+    }
+    return user
+  }
+}
+```
+
+Luego nos creamos un guard con Passport
+```ts
+@Injectable()
+export class JwtAuthGuard extends AuthGuard('jwt') {
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    return super.canActivate(context)
+  }
+}
+
+```
+
+
+
 
 ## Logging
 Podemos usar logs personalizados para nuestra aplicación.

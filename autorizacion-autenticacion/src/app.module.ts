@@ -3,6 +3,7 @@ import { ResourcesModule } from './resources/resources.module'
 import { ConfigModule } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { SharedModule } from './shared/shared.module'
+import { AuthModule } from './auth/auth.module'
 
 /**
  * Modulo principal de la aplicacion
@@ -24,8 +25,9 @@ import { SharedModule } from './shared/shared.module'
       synchronize: process.env.NODE_ENV === 'development', // si ha cambia el modelo, se sincroniza con la base de datos
       logging: process.env.NODE_ENV === 'development' ? 'all' : false, // si esta en modo desarrollo, se muestra los logs
     }),
-    ResourcesModule,
-    SharedModule,
+    ResourcesModule, // Inyectamos el modulo de recursos o endpoints
+    SharedModule, // Inyectamos el modulo de shared
+    AuthModule, // Inyectamos el modulo de autenticacion (JWT y Guards)
   ],
 
   controllers: [],
