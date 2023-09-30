@@ -1,0 +1,4 @@
+id,email,username,password,created_at,updated_at,role_id
+19bab157-4815-4ce3-92d9-05496d43a401,Viviane_Nicolas@gmail.com,Adalberto_Herzog63,$2b$12$08nFW5hJcyb1tAKOUOd7LuWkfw2lMUHgB5jIrJZRo9DiXqjo2nrMe,2023-09-30 09:00:25,2023-09-30 09:00:25,
+1a5e7dd8-a794-4a15-884b-5f103a8e5eab,admin@gmail2.com,Norene70,$2b$12$Q6BpaOo84juRp4dPJIRVl.mzwH7Je54e3A.qk14A5rfpPq4BUWOma,2023-09-30 08:59:17,2023-09-30 08:59:17,
+2ae7cb41-b73d-48e2-94c6-ebabb97d67ff,admin@gmail.com,Oliver.Cummerata70,$2b$12$1OBsHjA0vk56V8J2R5418erLuOvI5xxzKzvboMG4DX4B.R.P/8IWC,2023-09-30 08:10:09,2023-09-30 08:10:09,

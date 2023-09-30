@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm'
+import { RoleEntity } from './role.entity'
 
 @Entity({
   name: 'USERS',
@@ -50,4 +57,13 @@ export class UserEntity {
     default: () => 'CURRENT_TIMESTAMP', // Valor por defecto: la fecha y hora actual
   })
   updatedAt: Date
+
+  // Relacion M:1 con role, un usuario tiene un rol, un rol puede tener muchos usuarios
+  @ManyToOne(() => RoleEntity, (role) => role.user)
+  @JoinColumn({
+    name: 'role_id',
+    referencedColumnName: 'id',
+    foreignKeyConstraintName: 'FK_ROLE_USER',
+  })
+  role: RoleEntity
 }

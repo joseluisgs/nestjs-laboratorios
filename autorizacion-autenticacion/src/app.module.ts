@@ -21,7 +21,7 @@ import { SharedModule } from './shared/shared.module'
       database: process.env.DATABASE_NAME,
       entities: [`${__dirname}/**/*.entity{.ts,.js}`], // se cargan todas las entidades de la base de datos
       autoLoadEntities: true, // si no se especifica, se carga todas las entidades de la base de datos
-      synchronize: process.env.NODE_ENV === 'development' ? true : false, // si ha cambia el modelo, se sincroniza con la base de datos
+      synchronize: process.env.NODE_ENV === 'development', // si ha cambia el modelo, se sincroniza con la base de datos
       logging: process.env.NODE_ENV === 'development' ? 'all' : false, // si esta en modo desarrollo, se muestra los logs
     }),
     ResourcesModule,

@@ -679,6 +679,26 @@ export class User {
 }
 ```	
 
+#### Relaciones
+Podemos usar las anotaciones de TypeORM para definir las relaciones entre tablas. Estas aceptan un callback de configuración de cada realacion
+Entre ellas tenemos las siguientes:
+- OneToOne
+- OneToMany
+- ManyToMany
+
+```ts
+  // En la Entidad Rol
+// Relacion 1:N con usuer, un rol puede tener muchos usuarios, pero un usuario puede tener un solo rol
+
+  @OneToMany(() => UserEntity, (user) => user.role)
+  user: UserEntity
+
+// En la Entidad User
+// Relacion 1:N con usuer, un usuario puede tener un rol, pero un rol puede tener muchos usuarios
+  @ManyToMany(() => UserEntity, (user) => user.role)
+  user: UserEntity
+```
+
 El siguiente paso es registrar las entidades de datos en el módulo, se puede hacer con ` entities: [__dirname + '/**/*.entity{.ts,.js}']` o poniendo el nombre de la entidad a mano. Se crearán las tablas en la base de datos.
 
 Ahora vamos a usar el patrón repositorio. Lo primero es registrar nuestra entidad en el controlador (usuarios).
