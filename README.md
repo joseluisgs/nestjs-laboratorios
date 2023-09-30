@@ -603,7 +603,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 }
 ```
 
-Luego nos creamos un guard con Passport
+Luego nos creamos un guard con Passport para la autenticacion
 ```ts
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -616,8 +616,66 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
 ```
 
+Finalmente podemos usarlo en nuestro controlador completo o a nivel de método
+```ts
+@UseGuards(JwtAuthGuard)
+@Controller('auth')
+export class AuthController {
+  constructor(private readonly authService: AuthService) {}
 
+  @Post('login')
+  async login(@Body() loginUserDto: LoginUserDto) {
+    return this.authService.login(loginUserDto)
+  }
+}
+```
 
+Para la autorización podemos hacer unos guard que implemente CanActivate
+```ts
+@Injectable()
+export class RoleAuthGuard implements CanActivate {
+  private roles: string[] = []
+
+  constructor(...roles: string[]) {
+    console.log(roles)
+    this.roles = roles
+  }
+
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    const ctx = context.switchToHttp()
+    const { user } = ctx.getRequest() // Obtenemos el usuario, es lo mismo que ctx.getRequest().user
+    // console.log('roles', this.roles)
+    // console.log('user', user)
+    if (!this.roles.includes(user.role)) {
+      throw new ForbiddenException('Forbidden Role: You do not have access')
+    }
+    return true
+  }
+}
+```
+Luego podemos usarlo en algunos métodos o en el controlador, obviamente el orden importa, así que pon primero el de JWT
+```ts
+@UseGuards(JwtAuthGuard)
+@Controller('products')
+export class ProductsController {
+  constructor(private readonly productsService: ProductsService) {}
+
+  // Solo autenticados a nivel de método
+  @UseGuards(new RoleAuthGuard('ADMIN', 'WAREHOUSE_ADMIN'))
+  @Post()
+  create(@Body() createProductDto: CreateProductDto) {
+    return this.productsService.create(createProductDto)
+  }
+
+  @UseGuards(new RoleAuthGuard('ADMIN', 'WAREHOUSE_ADMIN', 'SELLER', 'USER'))
+  @Get()
+  findAll() {
+    return this.productsService.findAll()
+  }
+}
+```
 
 ## Logging
 Podemos usar logs personalizados para nuestra aplicación.

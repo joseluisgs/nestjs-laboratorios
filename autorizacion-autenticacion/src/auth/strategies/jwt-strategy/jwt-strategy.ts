@@ -20,6 +20,7 @@ export class JwtAuthStrategy extends PassportStrategy(Strategy) {
 
   // Si se valida obtenemos el role
   async validate(payload: User) {
+    // console.log(payload)
     return {
       id: payload.id,
       role: payload.role,

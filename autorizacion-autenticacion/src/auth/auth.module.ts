@@ -26,6 +26,7 @@ Passport
     PassportModule,
   ],
   exports: [JwtModule],
+  // Estrategias de autenticacion y autorizacion
   providers: [JwtAuthStrategy],
 })
 export class AuthModule {}
