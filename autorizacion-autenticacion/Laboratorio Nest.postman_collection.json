@@ -1228,6 +1228,21 @@
 				{
 					"name": "Sign Up",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "authapipass",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "authapiuser",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1255,8 +1270,67 @@
 					"response": []
 				},
 				{
+					"name": "Sign Up Other",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "authapipass",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "authapiuser",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{$randomUserName}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"password\": \"Superpassword123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/v1/auth/sign-up",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"auth",
+								"sign-up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Sign In",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "authapipass",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "authapiuser",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -1278,6 +1352,189 @@
 								"v1",
 								"auth",
 								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL Products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI1NDhlN2E4LWMxZWMtNGM1NS04YmViLTY0OTcxNDc5NWNhMiIsInVzZXJuYW1lIjoiTGFyb25fR2xlYXNvbjE5IiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5NjA5NDExMywiZXhwIjoxNjk2MDk3NzEzfQ.7wht4sQ74D8ZmROkor3PhdG23Zjg3-hb30J1t88MRrcX3UTYng574rhTlr6I2yz6O030UWr6kDgB0-IjYvcLdw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/v1/products",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Product By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI1NDhlN2E4LWMxZWMtNGM1NS04YmViLTY0OTcxNDc5NWNhMiIsInVzZXJuYW1lIjoiTGFyb25fR2xlYXNvbjE5IiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5NjA5NDExMywiZXhwIjoxNjk2MDk3NzEzfQ.7wht4sQ74D8ZmROkor3PhdG23Zjg3-hb30J1t88MRrcX3UTYng574rhTlr6I2yz6O030UWr6kDgB0-IjYvcLdw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/v1/products/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI1NDhlN2E4LWMxZWMtNGM1NS04YmViLTY0OTcxNDc5NWNhMiIsInVzZXJuYW1lIjoiTGFyb25fR2xlYXNvbjE5IiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE2OTYwOTYxMTgsImV4cCI6MTY5NjA5OTcxOH0.3Ly2DPyrf2M355aNZuOsOWjxtHx-wDynhVJORODGTczoJ_J_U9V3EFcw0J7ALh-YJaw7oIt6QL95zZuehL5lig",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/v1/products/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"products",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI1NDhlN2E4LWMxZWMtNGM1NS04YmViLTY0OTcxNDc5NWNhMiIsInVzZXJuYW1lIjoiTGFyb25fR2xlYXNvbjE5IiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5NjA5NDExMywiZXhwIjoxNjk2MDk3NzEzfQ.7wht4sQ74D8ZmROkor3PhdG23Zjg3-hb30J1t88MRrcX3UTYng574rhTlr6I2yz6O030UWr6kDgB0-IjYvcLdw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/v1/products/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI1NDhlN2E4LWMxZWMtNGM1NS04YmViLTY0OTcxNDc5NWNhMiIsInVzZXJuYW1lIjoiTGFyb25fR2xlYXNvbjE5IiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY5NjA5NDExMywiZXhwIjoxNjk2MDk3NzEzfQ.7wht4sQ74D8ZmROkor3PhdG23Zjg3-hb30J1t88MRrcX3UTYng574rhTlr6I2yz6O030UWr6kDgB0-IjYvcLdw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/v1/products/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Health Status Copy",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "authapipass",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "authapiuser",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/v1/health-check",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"v1",
+								"health-check"
 							]
 						}
 					},

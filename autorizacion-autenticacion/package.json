@@ -33,6 +33,8 @@
     "class-validator": "^0.14.0",
     "i": "^0.3.7",
     "mysql2": "^3.6.1",
+    "passport": "^0.6.0",
+    "passport-http": "^0.3.0",
     "passport-jwt": "^4.0.1",
     "process": "^0.11.10",
     "reflect-metadata": "^0.1.13",

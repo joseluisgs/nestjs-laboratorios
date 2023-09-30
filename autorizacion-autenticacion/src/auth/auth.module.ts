@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt'
 import * as process from 'process'
 import { PassportModule } from '@nestjs/passport'
 import { JwtAuthStrategy } from './strategies/jwt-strategy/jwt-strategy'
+import { BasicAuthStrategy } from './strategies/basic-strategy/basic-strategy'
 
 /*
 Modulo de autenticacion
@@ -27,6 +28,6 @@ Passport
   ],
   exports: [JwtModule],
   // Estrategias de autenticacion y autorizacion
-  providers: [JwtAuthStrategy],
+  providers: [JwtAuthStrategy, BasicAuthStrategy],
 })
 export class AuthModule {}

@@ -481,7 +481,7 @@ Podemos elegir el tipo de autorización, por ejemplo básica por http.
 
 Los instalamos como:
 ```bash
-npm install --save @nestjs/passport passport passport-http
+npm install --save @nestjs/passport-http passport passport-http
 ```
 
 Podemos crearnos un modulo auth y un provider de autenticación, por ejemplo para básico
@@ -537,7 +537,7 @@ También podemos usar certificados con JWT usando OpenSSL:
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout key.pem -out cert.pem
 ```
 
-Importamos JWP en nuestro módulo principal
+Importamos JWT en nuestro módulo principal
 ```ts
 @Module({
   imports: [
