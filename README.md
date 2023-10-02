@@ -333,6 +333,20 @@ Los [pipes](https://docs.nestjs.com/pipes) en Nest.js se usan verificar aspectos
   }
 ```
 
+Le podemos asignar un valor por defecto usando el pipe con new DefaultValuePipe('valor') antes del Parse
+```ts
+  @Get()
+  findAll(
+    @Query('page', new DefaultValuePipe(0), ParseIntPipe) page: number = 1,
+    @Query('pageSize', new DefaultValuePipe(0), ParseIntPipe)
+    pageSize: number = 20,
+  ) {
+    this.logger.log(`findAll: page: ${page}, pageSize: ${pageSize}`)
+    return this.citiesService.findAll()
+  }
+}
+```
+
 Podemos crear nuestro propio pipe para validar, por ejemplo, que un email sea un email, o que un id sea un uuid, etc. Para ello debemos crear una clase que implemente PipeTransform y usarla en el controlador o en el módulo.
 También lo puedes hacer con el comando:
 ```bash
