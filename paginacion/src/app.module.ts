@@ -1,7 +1,8 @@
 import { Logger, Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { HealthCheckModule } from './resources/health-check/health-check.module'
 import { SequelizeModule } from '@nestjs/sequelize'
+import { ResourcesModule } from './resources/resources.module'
+import { City } from './resources/cities/models/city.model'
 
 @Module({
   imports: [
@@ -15,14 +16,15 @@ import { SequelizeModule } from '@nestjs/sequelize'
       password: process.env.DATABASE_PASSWORD || 'root',
       database: process.env.DATABASE_NAME || 'database',
       autoLoadModels: true, // carregando as models automaticamente
-      models: [`${__dirname}/**/*.model{.ts,.js}`], // carregando as models automaticamente
+      // models: [`${__dirname}/**/*.model{.ts,.js}`], // carregando as models automaticamente
+      models: [City],
       synchronize: process.env.NODE_ENV === 'development',
       logging:
         process.env.NODE_ENV === 'development'
           ? (sql, timing) => Logger.debug(`${sql} - ${timing}`)
           : false,
     }),
-    HealthCheckModule,
+    ResourcesModule,
   ],
   controllers: [],
   providers: [],
