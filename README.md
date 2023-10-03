@@ -16,6 +16,7 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
     - [Controller](#controller)
       - [CRUD operations](#crud-operations)
       - [Obtener información del Request](#obtener-información-del-request)
+    - [Paginación](#paginación)
     - [Providers](#providers)
     - [Module](#module)
   - [Generador de CRUDS](#generador-de-cruds)
@@ -142,6 +143,50 @@ Por ejemplo cómo forzar que el id sea un número al hacer un get
     return `Usuario con id: ${id}`;
   }
 ```
+
+### Paginación
+Para hacer paginaciones podemos usar @Query con el paquete [Nest-Paginate](https://github.com/ppetzold/nestjs-paginate), el cual nos ofrece distintas formas ed hacer la paginación con métodos ya pre-establecidos y dándonos los links.
+
+Lo instalamos como
+```bash
+npm install --save nestjs-paginate
+```
+
+````ts
+@Injectable()
+export class CatsService {
+  constructor(
+    @InjectRepository(CatEntity)
+    private readonly catsRepository: Repository<CatEntity>
+  ) {}
+
+  public findAll(query: PaginateQuery): Promise<Paginated<CatEntity>> {
+    return paginate(query, this.catsRepository, {
+      sortableColumns: ['id', 'name', 'color', 'age'],
+      nullSort: 'last',
+      defaultSortBy: [['id', 'DESC']],
+      searchableColumns: ['name', 'color', 'age'],
+      select: ['id', 'name', 'color', 'age', 'lastVetVisit'],
+      filterableColumns: {
+        name: [FilterOperator.EQ, FilterSuffix.NOT],
+        age: true,
+      },
+    })
+  }
+}
+
+@Controller('cats')
+export class CatsController {
+  constructor(private readonly catsService: CatsService) {}
+
+  @Get()
+  public findAll(@Paginate() query: PaginateQuery): Promise<Paginated<CatEntity>> {
+    return this.catsService.findAll(query)
+  }
+}
+````
+
+
 
 ### Providers
 Los servicios, repositorios son [Providers](https://docs.nestjs.com/providers) son clases que contienen la lógica de negocio de nuestra aplicación. Los servicios son clases decoradas con @Injectable() y que pueden ser inyectadas en los controladores, módulos u otros servicios. Por lo tanto alojan la lógica de negocio de tal manera que sea reutilizable mediante inyección de dependencias.

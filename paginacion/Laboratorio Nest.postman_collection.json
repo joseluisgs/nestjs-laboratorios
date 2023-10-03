@@ -1658,7 +1658,7 @@
 							"response": []
 						},
 						{
-							"name": "GET ALLSearch",
+							"name": "GET ALL Search",
 							"request": {
 								"method": "GET",
 								"header": [],
@@ -1692,6 +1692,137 @@
 										{
 											"key": "search",
 											"value": "Mad"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Countries",
+					"item": [
+						{
+							"name": "GET ALL",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/v1/countries",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"countries"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET ALL Pagination and Size",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/v1/countries?limit=30&page=1",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"countries"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "30"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET ALL Filter and Order",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/v1/countries?page=1&limit=100&sortBy=continent:DESC",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"countries"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "100"
+										},
+										{
+											"key": "sortBy",
+											"value": "continent:DESC"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET ALL Search",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/v1/countries?page=1&limit=3&searchBy=name&search=pa&sortBy=population:DESC&filter.population=$gt:38000000",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"countries"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "3"
+										},
+										{
+											"key": "searchBy",
+											"value": "name"
+										},
+										{
+											"key": "search",
+											"value": "pa"
+										},
+										{
+											"key": "sortBy",
+											"value": "population:DESC"
+										},
+										{
+											"key": "filter.population",
+											"value": "$gt:38000000"
 										}
 									]
 								}
