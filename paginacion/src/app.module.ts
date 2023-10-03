@@ -4,6 +4,7 @@ import { SequelizeModule } from '@nestjs/sequelize'
 import { ResourcesModule } from './resources/resources.module'
 import { City } from './resources/cities/models/city.model'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { Country } from './resources/countries/entities/country.entity'
 
 @Module({
   imports: [
@@ -34,7 +35,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
       password: process.env.DATABASE_PASSWORD || 'root',
       database: process.env.DATABASE_NAME || 'database',
       autoLoadEntities: true,
-      entities: [`${__dirname}/**/*.entity{.ts,.js}`],
+      entities: [Country],
       synchronize: process.env.NODE_ENV === 'development',
       logging: process.env.NODE_ENV === 'development' ? 'all' : false,
     }),
