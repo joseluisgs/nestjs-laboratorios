@@ -7,7 +7,7 @@ import {
   Query,
   Req,
 } from '@nestjs/common'
-import { CitiesService } from './cities.service'
+import { CitiesService, Filter, Sort } from './cities.service'
 import { Request } from 'express' // Es el de express, no el de NestJS
 
 @Controller('cities')
@@ -21,6 +21,8 @@ export class CitiesController {
     @Query('page', new DefaultValuePipe(0), ParseIntPipe) page: number,
     @Query('pageSize', new DefaultValuePipe(10), ParseIntPipe)
     pageSize: number,
+    @Query('filter') filter: Filter = 'ID',
+    @Query('order') order: Sort = 'ASC',
     @Req() request: Request,
   ) {
     // console.log(request)
@@ -32,6 +34,8 @@ export class CitiesController {
       const response = await this.citiesService.findAllWithPagination(
         page,
         pageSize,
+        filter,
+        order,
       )
 
       // Para ajustar los valores de page y pageSizeen hipermedia
@@ -51,8 +55,8 @@ export class CitiesController {
 
       // La respuesta que se envía al cliente
       return {
-        next_page: `${host}${path}?page=${nextPage}&pageSize=${pageSize}`,
-        previous_page: `${host}${path}?page=${previousPage}&pageSize=${pageSize}`,
+        next_page: `${host}${path}?page=${nextPage}&pageSize=${pageSize}&filter=${filter}&order=${order}`,
+        previous_page: `${host}${path}?page=${previousPage}&pageSize=${pageSize}&filter=${filter}&order=${order}`,
         ...response,
       }
     }
