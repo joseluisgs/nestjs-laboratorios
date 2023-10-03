@@ -8,7 +8,8 @@ import {
   Req,
 } from '@nestjs/common'
 import { CitiesService, Filter, Sort } from './cities.service'
-import { Request } from 'express' // Es el de express, no el de NestJS
+import { Request } from 'express'
+import { TypePipe } from './pipes/filter-type-pype/type.pipe' // Es el de express, no el de NestJS
 
 @Controller('cities')
 export class CitiesController {
@@ -21,8 +22,12 @@ export class CitiesController {
     @Query('page', new DefaultValuePipe(0), ParseIntPipe) page: number,
     @Query('pageSize', new DefaultValuePipe(10), ParseIntPipe)
     pageSize: number,
-    @Query('filter') filter: Filter = 'ID',
-    @Query('order') order: Sort = 'ASC',
+    @Query(
+      'filter',
+      new TypePipe(['ID', 'Name', 'countryCode', 'District', 'Population']),
+    )
+    filter: Filter = 'ID',
+    @Query('order', new TypePipe(['ASC', 'DESC'])) order: Sort = 'ASC',
     @Req() request: Request,
   ) {
     // console.log(request)
