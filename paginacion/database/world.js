@@ -1,3 +1,5 @@
+// Creamos el usuario administrador de la base de datos
+// con sus daatos de conexion y los roles que tendra
 db.createUser({
   user: 'admin',
   pwd: 'adminPassword123',
@@ -9,10 +11,13 @@ db.createUser({
   ],
 })
 
+// Nos conectamos a la base de datos world
 db = db.getSiblingDB('world')
 
+// Creamos la coleccion city
 db.createCollection('countrylanguage')
 
+// Insertamos los datos en la coleccion city
 db.countrylanguage.insertMany([
   {
     CountryCode: 'ABW',
