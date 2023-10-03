@@ -16,7 +16,6 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
     - [Controller](#controller)
       - [CRUD operations](#crud-operations)
       - [Obtener información del Request](#obtener-información-del-request)
-    - [Paginación](#paginación)
     - [Providers](#providers)
     - [Module](#module)
   - [Generador de CRUDS](#generador-de-cruds)
@@ -31,8 +30,11 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
     - [Autenticación con JWT](#autenticación-con-jwt)
   - [Logging](#logging)
   - [Bases de Datos](#bases-de-datos)
-    - [Ejemplo con PostgreSQL](#ejemplo-con-postgresql)
+    - [Ejemplo con TypeORM](#ejemplo-con-typeorm)
     - [Ejemplo con MongoDB](#ejemplo-con-mongodb)
+    - [Paginación](#paginación)
+      - [Paginación con TypeORM](#paginación-con-typeorm)
+      - [Paginación con MongoDB](#paginación-con-mongodb)
   - [Variables de entorno](#variables-de-entorno)
   - [Testing](#testing)
     - [Test unitarios de servicios](#test-unitarios-de-servicios)
@@ -143,50 +145,6 @@ Por ejemplo cómo forzar que el id sea un número al hacer un get
     return `Usuario con id: ${id}`;
   }
 ```
-
-### Paginación
-Para hacer paginaciones podemos usar @Query con el paquete [Nest-Paginate](https://github.com/ppetzold/nestjs-paginate), el cual nos ofrece distintas formas ed hacer la paginación con métodos ya pre-establecidos y dándonos los links.
-
-Lo instalamos como
-```bash
-npm install --save nestjs-paginate
-```
-
-````ts
-@Injectable()
-export class CatsService {
-  constructor(
-    @InjectRepository(CatEntity)
-    private readonly catsRepository: Repository<CatEntity>
-  ) {}
-
-  public findAll(query: PaginateQuery): Promise<Paginated<CatEntity>> {
-    return paginate(query, this.catsRepository, {
-      sortableColumns: ['id', 'name', 'color', 'age'],
-      nullSort: 'last',
-      defaultSortBy: [['id', 'DESC']],
-      searchableColumns: ['name', 'color', 'age'],
-      select: ['id', 'name', 'color', 'age', 'lastVetVisit'],
-      filterableColumns: {
-        name: [FilterOperator.EQ, FilterSuffix.NOT],
-        age: true,
-      },
-    })
-  }
-}
-
-@Controller('cats')
-export class CatsController {
-  constructor(private readonly catsService: CatsService) {}
-
-  @Get()
-  public findAll(@Paginate() query: PaginateQuery): Promise<Paginated<CatEntity>> {
-    return this.catsService.findAll(query)
-  }
-}
-````
-
-
 
 ### Providers
 Los servicios, repositorios son [Providers](https://docs.nestjs.com/providers) son clases que contienen la lógica de negocio de nuestra aplicación. Los servicios son clases decoradas con @Injectable() y que pueden ser inyectadas en los controladores, módulos u otros servicios. Por lo tanto alojan la lógica de negocio de tal manera que sea reutilizable mediante inyección de dependencias.
@@ -782,7 +740,7 @@ También me puedo hacer mi propio log, de una clase que implemente la interfaz L
 ## Bases de Datos
 Para trabajar con Bases de Datos nos vamos a ayudar de Docker y Docker Compose y sobre todo de [TypeORM](https://typeorm.io/), que es on ORM para JS/TypeScript y compatible totalmente con [Nest.js](https://docs.nestjs.com/techniques/database).
 
-### Ejemplo con PostgreSQL
+### Ejemplo con TypeORM
 
 Lo primero es instalar su módulo y las dependencias a TypeORM y a cada uno de los SGDB que usemos, por ejemplo, para PostgreSQL:
 ```bash
@@ -982,6 +940,57 @@ export class ProductsService {
   }
 }
 
+```
+### Paginación
+
+#### Paginación con TypeORM
+Para hacer paginaciones podemos usar @Query con el paquete [Nest-Paginate](https://github.com/ppetzold/nestjs-paginate), el cual nos ofrece distintas formas ed hacer la paginación con métodos ya pre-establecidos y dándonos los links.
+
+Lo instalamos como
+```bash
+npm install --save nestjs-paginate
+```
+
+````ts
+@Injectable()
+export class CatsService {
+  constructor(
+    @InjectRepository(CatEntity)
+    private readonly catsRepository: Repository<CatEntity>
+  ) {}
+
+  public findAll(query: PaginateQuery): Promise<Paginated<CatEntity>> {
+    return paginate(query, this.catsRepository, {
+      sortableColumns: ['id', 'name', 'color', 'age'],
+      nullSort: 'last',
+      defaultSortBy: [['id', 'DESC']],
+      searchableColumns: ['name', 'color', 'age'],
+      select: ['id', 'name', 'color', 'age', 'lastVetVisit'],
+      filterableColumns: {
+        name: [FilterOperator.EQ, FilterSuffix.NOT],
+        age: true,
+      },
+    })
+  }
+}
+
+@Controller('cats')
+export class CatsController {
+  constructor(private readonly catsService: CatsService) {}
+
+  @Get()
+  public findAll(@Paginate() query: PaginateQuery): Promise<Paginated<CatEntity>> {
+    return this.catsService.findAll(query)
+  }
+}
+````
+
+#### Paginación con MongoDB
+Para hacer la paginación con MongoDB vamos a ayudarnos del paquete [Mongoose-Paginate](https://github.com/aravindnc/mongoose-paginate-v2).
+
+Lo instalamos como
+```bash
+npm install --save mongoose-paginate-v2
 ```
 
 ## Variables de entorno

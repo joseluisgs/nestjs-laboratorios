@@ -5,6 +5,8 @@ import { ResourcesModule } from './resources/resources.module'
 import { City } from './resources/cities/models/city.model'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Country } from './resources/countries/entities/country.entity'
+import { MongooseModule } from '@nestjs/mongoose'
+import { Connection } from 'mongoose'
 
 @Module({
   imports: [
@@ -39,6 +41,22 @@ import { Country } from './resources/countries/entities/country.entity'
       synchronize: process.env.NODE_ENV === 'development',
       logging: process.env.NODE_ENV === 'development' ? 'all' : false,
     }),
+    // Mongoose
+    MongooseModule.forRoot(
+      `mongodb://${process.env.DATABASE_USER}:${
+        process.env.DATABASE_PASSWORD
+      }@${process.env.DATABASE_HOST}:${process.env.MONGO_PORT || 27017}/${
+        process.env.DATABASE_NAME
+      }`,
+      {
+        retryAttempts: 3,
+        connectionFactory: (connection: Connection) => {
+          // Se ha conectado a la base de datos
+          Logger.debug(`mongoose readyState: ${connection.readyState}`)
+          return connection
+        },
+      },
+    ),
     ResourcesModule,
   ],
   controllers: [],
