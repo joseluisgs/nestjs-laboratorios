@@ -28,6 +28,7 @@ export class CitiesController {
     )
     filter: Filter = 'ID',
     @Query('order', new TypePipe(['ASC', 'DESC'])) order: Sort = 'ASC',
+    @Query('search') search = '',
     @Req() request: Request,
   ) {
     // console.log(request)
@@ -41,6 +42,7 @@ export class CitiesController {
         pageSize,
         filter,
         order,
+        search,
       )
 
       // Para ajustar los valores de page y pageSizeen hipermedia
@@ -60,8 +62,8 @@ export class CitiesController {
 
       // La respuesta que se envía al cliente
       return {
-        next_page: `${host}${path}?page=${nextPage}&pageSize=${pageSize}&filter=${filter}&order=${order}`,
-        previous_page: `${host}${path}?page=${previousPage}&pageSize=${pageSize}&filter=${filter}&order=${order}`,
+        next_page: `${host}${path}?page=${nextPage}&pageSize=${pageSize}&filter=${filter}&order=${order}&search=${search}`,
+        previous_page: `${host}${path}?page=${previousPage}&pageSize=${pageSize}&filter=${filter}&order=${order}&search=${search}`,
         ...response,
       }
     }

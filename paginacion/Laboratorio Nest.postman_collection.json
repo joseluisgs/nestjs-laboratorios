@@ -1590,6 +1590,113 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "GET ALL Pagination and Size",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/v1/cities?page=1&pageSize=100",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"cities"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "100"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET ALL Filter and Order",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/v1/cities?page=1&pageSize=100&filter=Population&order=DESC",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"cities"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "100"
+										},
+										{
+											"key": "filter",
+											"value": "Population"
+										},
+										{
+											"key": "order",
+											"value": "DESC"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET ALLSearch",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/v1/cities?page=1&pageSize=100&filter=Population&order=DESC&search=Mad",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"cities"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "100"
+										},
+										{
+											"key": "filter",
+											"value": "Population"
+										},
+										{
+											"key": "order",
+											"value": "DESC"
+										},
+										{
+											"key": "search",
+											"value": "Mad"
+										}
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
