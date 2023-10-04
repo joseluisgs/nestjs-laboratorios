@@ -1830,6 +1830,30 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Country Languages",
+					"item": [
+						{
+							"name": "GET ALL",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/v1/countries-languages",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"countries-languages"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		}
