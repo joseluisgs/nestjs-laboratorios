@@ -992,6 +992,115 @@ Lo instalamos como
 ```bash
 npm install --save mongoose-paginate-v2
 ```
+El primer paso es en el módulo del recurso a paginar, debemos importar el plugin de paginación
+
+```ts
+@Module({
+  imports: [
+    MongooseModule.forFeatureAsync([
+      {
+        name: CountryLanguage.name,
+        useFactory: () => {
+          const schema = SchemaFactory.createForClass(CountryLanguage)
+          schema.plugin(mongoosePaginate)
+          return schema
+        },
+      },
+    ]),
+  ],
+  controllers: [CountriesLanguagesController],
+  providers: [CountriesLanguagesService],
+})
+export class CountriesLanguagesModule {}
+```	
+
+El siguiente paso es crear el esquema y el documento. Primero creamos el esquema con @Schema
+```ts
+@Schema()
+export class CountryLanguage {
+  @Prop({ type: String, required: true })
+  countrycode: string
+
+  @Prop({ type: String, required: true })
+  language: string
+
+  @Prop({ type: Boolean, required: true })
+  isofficial: boolean
+
+  @Prop({ type: Number, required: true })
+  percentage: number
+}
+```
+
+Luego hacemos uso de SchemaFactory para crear el esquema con el plugin de paginación
+```ts
+export const CountryLanguageSchema =
+  SchemaFactory.createForClass(CountryLanguage)
+CountryLanguageSchema.plugin(mongoosePaginate)
+```	
+
+Finalmente, creamos el tipo del documento que nos servirá para mapear los resultados paginados.
+```ts
+export type CountryLanguageDocument = CountryLanguage & Document
+```
+
+Ya en nuestro servicio podemos importarlo y usarlo
+```ts
+// Aquí irían los tipos de datos para los filtros y la ordenación
+export type CountryLanguageFilter =
+  | 'CountryCode'
+  | 'Language'
+  | 'IsOfficial'
+  | 'Percentage'
+export type CountryLanguageOrder = 'asc' | 'desc'
+
+@Injectable()
+export class CountriesLanguagesService {
+  private logger = new Logger(CountriesLanguagesService.name)
+
+  constructor(
+    @InjectModel(CountryLanguage.name)
+    private countryLanguageModel: PaginateModel<CountryLanguageDocument>,
+  ) {}
+
+  async findAll(): Promise<CountryLanguage[]> {
+    return await this.countryLanguageModel.find().exec()
+  }
+
+  async findAllPaginated(
+    page: number,
+    pageSize: number,
+    filter: CountryLanguageFilter,
+    order: CountryLanguageOrder,
+    search: string,
+  ) {
+    this.logger.log(
+      `page: ${page}, pageSize: ${pageSize}, filter: ${filter}, order: ${order}, search: ${search}`,
+    )
+    // Aquí iría la query de búsqueda y filtrado
+    const query = {
+      [filter]: {
+        $regex: `.*${search}.*`, // para que busque en cualquier parte del campo
+        $options: 'i', // para que no distinga entre mayúsculas y minúsculas
+      },
+    }
+    // Aquí iría la query de ordenación y paginación
+    const options = {
+      page,
+      limit: pageSize,
+      sort: { [filter]: order },
+      collection: 'es_ES', // para que use la configuración de idioma de España
+    }
+    // lanzamos la operación de búsqueda y paginación
+    // si no hay filtro, query será un objeto vacío, y no puede ser Percentage
+    return await this.countryLanguageModel.paginate(
+      filter !== 'Percentage' ? query : {},
+      options,
+    )
+  }
+}
+```
+
 
 ## Variables de entorno
 Meter los datos sensibles, como contraseñas y cadenas de conexión en el código no es lo recomendable, o simplemente para adaptar a distintos entornos, por lo que debemos trabajar con variables de entorno para solucionar este hecho usamos los ficheros .env

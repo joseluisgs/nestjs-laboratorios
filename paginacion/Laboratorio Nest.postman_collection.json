@@ -1852,6 +1852,113 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "GET ALL Pagination & Size",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/v1/countries-languages?page=1&pageSize=2",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"countries-languages"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET ALL Filter & Order",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/v1/countries-languages?page=1&pageSize=10&filter=Language&order=desc",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"countries-languages"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										},
+										{
+											"key": "filter",
+											"value": "Language"
+										},
+										{
+											"key": "order",
+											"value": "desc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET ALL Search",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/v1/countries-languages?page=1&pageSize=10&filter=Language&order=desc&search=Spa",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"countries-languages"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "pageSize",
+											"value": "10"
+										},
+										{
+											"key": "filter",
+											"value": "Language"
+										},
+										{
+											"key": "order",
+											"value": "desc"
+										},
+										{
+											"key": "search",
+											"value": "Spa"
+										}
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
