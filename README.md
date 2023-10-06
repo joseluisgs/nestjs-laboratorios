@@ -1317,6 +1317,41 @@ Para obtener un fichero podemos hacer uso de fs de Node.js y de Response de Expr
  npm i -D @types/sharp
  ```  
 
+Podemos crearnos un servicio de Sharp para pocesar las imagenes. Podemos hacer 
+```ts
+@Injectable()
+export class SharpService {
+  private readonly logger = new Logger(SharpService.name)
+  private readonly imageProcessor = sharp // sharp es una librería para procesar imágenes
+
+  constructor() {
+    this.imageProcessor.cache(false) // deshabilitamos el cache para que no se guarde en disco
+  }
+
+  // Obtener metadata de la imagen
+  getMetadata(imagePath: string) {
+    try {
+      this.logger.debug(`Obteniendo metadata de la imagen`)
+      return this.imageProcessor(imagePath).metadata()
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException(error.message)
+    }
+  }
+
+  // Obtener estadísticas de la imagen
+  getStats(imagePath: string) {
+    try {
+      this.logger.debug(`Obteniendo estadísticas de la imagen`)
+      return this.imageProcessor(imagePath).stats()
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException(error.message)
+    }
+  }
+}
+```
+
 ## Testing
 Para hacer el testing con [Nest.js](https://docs.nestjs.com/fundamentals/testing) haremos uso de [Jest](https://jestjs.io/es-ES/docs/getting-started) y [Supertest](https://github.com/ladjs/supertest).
 
