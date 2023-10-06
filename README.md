@@ -38,6 +38,7 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
   - [Variables de entorno](#variables-de-entorno)
   - [Subida de ficheros](#subida-de-ficheros)
     - [Trabajando con Multuex](#trabajando-con-multuex)
+    - [Trabajando con Sharp](#trabajando-con-sharp)
   - [Testing](#testing)
     - [Test unitarios de servicios](#test-unitarios-de-servicios)
     - [Test unitarios de controladores](#test-unitarios-de-controladores)
@@ -1290,9 +1291,27 @@ También podemos pasarele parámetros procesando el body de una petición
   }
 ```	
 
+### Obteniendo un fichero
+Para obtener un fichero podemos hacer uso de fs de Node.js y de Response de Express
+```ts
+@Get('download-file/:filename')
+  downloadFile(@Param('filename') filename: string, @Res() res: Response) {
+    const filePath = path.resolve('./uploads', filename)
+
+    // Verifica si el archivo existe
+    if (fs.existsSync(filePath)) {
+      // Si el archivo existe, lo establece como la respuesta
+      res.download(filePath)
+    } else {
+      // Si el archivo no existe, envía un error 404
+      res.status(404).send('Fichero no encontrado :(')
+    }
+  }
+  ```
+
 ### Trabajando con Sharp
 
-Sharp es una librería que nos permite trabajar con imágenes, por ejemplo, para redimensionarlas, aplicar efectos, etc. Para ello debemos instalarla como dependencia
+[Sharp](https://sharp.pixelplumbing.com/) es una librería que nos permite trabajar con imágenes, por ejemplo, para redimensionarlas, aplicar efectos, etc. Para ello debemos instalarla como dependencia
 ```bash
  npm i sharp
  npm i -D @types/sharp

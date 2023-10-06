@@ -1,8 +1,11 @@
 import {
   Body,
   Controller,
+  Get,
   Logger,
+  Param,
   Post,
+  Res,
   UploadedFile,
   UploadedFiles,
   UseInterceptors,
@@ -14,7 +17,11 @@ import {
 } from '@nestjs/platform-express'
 import { diskStorage } from 'multer'
 import { v4 as uuidv4 } from 'uuid'
+import * as path from 'path'
 import { extname } from 'path'
+import * as fs from 'fs'
+
+import { Response } from 'express'
 
 @Controller('images')
 export class ImagesController {
@@ -142,6 +149,21 @@ export class ImagesController {
       mimetype: file.mimetype,
       destination: file.destination,
       path: file.path,
+    }
+  }
+
+  // Descarga de archivos
+  @Get('download-file/:filename')
+  downloadFile(@Param('filename') filename: string, @Res() res: Response) {
+    const filePath = path.resolve('./uploads', filename)
+
+    // Verifica si el archivo existe
+    if (fs.existsSync(filePath)) {
+      // Si el archivo existe, lo establece como la respuesta
+      res.download(filePath)
+    } else {
+      // Si el archivo no existe, envía un error 404
+      res.status(404).send('Fichero no encontrado :(')
     }
   }
 }

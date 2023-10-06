@@ -1968,155 +1968,192 @@
 			"name": "Ficheros",
 			"item": [
 				{
-					"name": "UPLOAD FILES Multex",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/logo-small.svg"
-								}
-							]
-						},
-						"url": {
-							"raw": "localhost:3000/v1/images/upload-file",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"v1",
-								"images",
-								"upload-file"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "STORE FILE Multex",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/logo-small.svg"
-								}
-							]
-						},
-						"url": {
-							"raw": "localhost:3000/v1/images/store-file",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"v1",
-								"images",
-								"store-file"
-							],
-							"query": [
-								{
-									"key": "file",
-									"value": null,
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "STORE FILES Multex",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file1",
-									"type": "file",
-									"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/logo-small.svg"
+					"name": "Multex",
+					"item": [
+						{
+							"name": "UPLOAD FILES Multex",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/logo-small.svg"
+										}
+									]
 								},
-								{
-									"key": "file2",
-									"type": "file",
-									"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/logo-small.svg"
+								"url": {
+									"raw": "localhost:3000/v1/images/upload-file",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"images",
+										"upload-file"
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "localhost:3000/v1/images/store-files",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"v1",
-								"images",
-								"store-files"
-							],
-							"query": [
-								{
-									"key": "file",
-									"value": null,
-									"disabled": true
+						{
+							"name": "STORE FILE Multex",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/logo-small.svg"
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:3000/v1/images/store-file",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"images",
+										"store-file"
+									],
+									"query": [
+										{
+											"key": "file",
+											"value": null,
+											"disabled": true
+										}
+									]
 								}
-							]
+							},
+							"response": []
+						},
+						{
+							"name": "STORE FILES Multex",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file1",
+											"type": "file",
+											"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/logo-small.svg"
+										},
+										{
+											"key": "file2",
+											"type": "file",
+											"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/logo-small.svg"
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:3000/v1/images/store-files",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"images",
+										"store-files"
+									],
+									"query": [
+										{
+											"key": "file",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET FILE",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:3000/v1/images/download-file/:filename",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"images",
+										"download-file",
+										":filename"
+									],
+									"variable": [
+										{
+											"key": "filename",
+											"value": "6ad3e58f-9092-4cb5-bc8f-de7d77d76e30.svg"
+										}
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "PORCESS FILE Multex",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file",
-									"type": "file",
-									"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/logo-small.svg"
+					"name": "Sharp",
+					"item": [
+						{
+							"name": "PORCESS FILE Multex",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/14-Ficheros/logo-small.svg"
+										},
+										{
+											"key": "properties",
+											"value": "{\"name\": \"Mi nombre\"}",
+											"type": "text"
+										}
+									]
 								},
-								{
-									"key": "body",
-									"value": "{\"properties\": {\"name\": \"Mi nombre\"}}",
-									"type": "text"
+								"url": {
+									"raw": "localhost:3000/v1/processor/process-image",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"processor",
+										"process-image"
+									],
+									"query": [
+										{
+											"key": "file",
+											"value": null,
+											"disabled": true
+										}
+									]
 								}
-							]
-						},
-						"url": {
-							"raw": "localhost:3000/v1/images/process-file",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"v1",
-								"images",
-								"process-file"
-							],
-							"query": [
-								{
-									"key": "file",
-									"value": null,
-									"disabled": true
-								}
-							]
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				}
 			]
 		}
