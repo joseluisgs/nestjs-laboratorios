@@ -36,8 +36,7 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
       - [Paginación con TypeORM](#paginación-con-typeorm)
       - [Paginación con MongoDB](#paginación-con-mongodb)
   - [Variables de entorno](#variables-de-entorno)
-  - [Testing](#testing)
-    - [Test unitarios de servicios](#test-unitarios-de-servicios)
+  - [Subida de ficheros](#subida-de-ficheros)
     - [Test unitarios de controladores](#test-unitarios-de-controladores)
     - [Testing E2E](#testing-e2e)
     - [Testing Coverage](#testing-coverage)
@@ -1144,6 +1143,147 @@ Luego lo importamos en nuestro app.module.ts, cuidado que el módulo de config d
 })
 export class AppModule {}
 ```
+
+## Subida de ficheros
+Nest.js permite trabajar con [ficheros](https://docs.nestjs.com/techniques/file-upload) gracias al módulo de multer que viene en express. Lo primero que debemos hacer es instalar los tipos para TypeScript pues ya viene multer instalado, solo necesitamos eso.
+```bash
+$ npm i -D @types/multer
+```
+
+Trabajaremos con él a nivel de controlador con `@Post` y `multipart/form-data` en el controlador con y `@UploadedFile` para obtener el fichero subido. También podemos usar `@UseInterceptors` para usarlo a nivel de método.
+
+```ts
+@Controller('upload')
+export class UploadController {
+  constructor(private readonly uploadService: UploadService) {}
+
+  @Post()
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(@UploadedFile() file) {
+    console.log(file)
+    return this.uploadService.uploadFile(file)
+  }
+}
+```
+
+Podemos hacer uso en FileIntercepto de diskStorage para copiarlo
+```ts
+@Post('store-file')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          const fileName = uuidv4() // usamos uuid para generar un nombre único para el archivo
+          const fileExt = extname(file.originalname) // extraemos la extensión del archivo
+          cb(null, `${fileName}${fileExt}`) // llamamos al callback con el nombre del archivo
+        },
+      }),
+    }),
+  ) // 'file' es el nombre del campo en el formulario
+  storeFile(@UploadedFile() file: Express.Multer.File) {
+    this.logger.log(`Subiendo archivo:  ${file}`)
+    return {
+      originalname: file.originalname,
+      filename: file.filename,
+      size: file.size,
+      mimetype: file.mimetype,
+      destination: file.destination,
+      path: file.path,
+    }
+  }
+```
+
+También puedo subir ficheros usando `@UploadedFiles` para subir varios ficheros y `FileFieldsInterceptor`.
+```ts
+@Post('store-files')
+  @UseInterceptors(
+    // 'files' es el nombre del campo en el formulario
+    FileFieldsInterceptor(
+      [
+        { name: 'file1', maxCount: 1 },
+        { name: 'file2', maxCount: 1 },
+      ],
+      {
+        // Actúa por cada fichero subido
+        storage: diskStorage({
+          destination: './uploads',
+          filename: (req, file, cb) => {
+            const fileName = uuidv4() // usamos uuid para generar un nombre único para el archivo
+            const fileExt = extname(file.originalname) // extraemos la extensión del archivo
+            cb(null, `${fileName}${fileExt}`) // llamamos al callback con el nombre del archivo
+          },
+        }),
+      },
+    ),
+  ) // 'file' es el nombre del campo en el formulario
+  storeFiles(
+    @UploadedFiles()
+    files: {
+      file1: Express.Multer.File[]
+      file2: Express.Multer.File[]
+    },
+  ) {
+    this.logger.log(`Subiendo archivos:  ${files.file1}`)
+    this.logger.log(`Subiendo archivos:  ${files.file2}`)
+    console.log(files)
+    return {
+      file1: {
+        originalname: files.file1[0].originalname,
+        filename: files.file1[0].filename,
+        size: files.file1[0].size,
+        mimetype: files.file1[0].mimetype,
+        destination: files.file1[0].destination,
+      },
+      file2: {
+        originalname: files.file2[0].originalname,
+        filename: files.file2[0].filename,
+        size: files.file2[0].size,
+        mimetype: files.file2[0].mimetype,
+        destination: files.file2[0].destination,
+      },
+    }
+  }
+  ```
+
+También podemos pasarele parámetros procesando el body de una petición
+```ts
+ @Post('process-file')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          const fileName = uuidv4() // usamos uuid para generar un nombre único para el archivo
+          const fileExt = extname(file.originalname) // extraemos la extensión del archivo
+          cb(null, `${fileName}${fileExt}`) // llamamos al callback con el nombre del archivo
+        },
+      }),
+    }),
+  ) // 'file' es el nombre del campo en el formulario
+  processFile(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() body: { body: any },
+  ) {
+    this.logger.log(`Subiendo archivo:  ${file}`)
+    this.logger.log(`Body:  ${JSON.stringify(body.body)}`)
+    console.log(file)
+    console.log(body)
+
+    const parsedBody = JSON.parse(body.body) // convertimos body a un objeto JSON
+    const name = parsedBody.properties.name // accedemos a la propiedad name
+
+    return {
+      name: name,
+      originalname: file.originalname,
+      filename: file.filename,
+      size: file.size,
+      mimetype: file.mimetype,
+      destination: file.destination,
+      path: file.path,
+    }
+  }
+```	
 
 ## Testing
 Para hacer el testing con [Nest.js](https://docs.nestjs.com/fundamentals/testing) haremos uso de [Jest](https://jestjs.io/es-ES/docs/getting-started) y [Supertest](https://github.com/ladjs/supertest).
