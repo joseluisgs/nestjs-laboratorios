@@ -45,26 +45,25 @@ export class CitiesController {
         search,
       )
 
-      // Para ajustar los valores de page y pageSizeen hipermedia
-      // Si la página es mayor que el total de páginas, se queda en la última
-      let nextPage = page + 1
-      if (nextPage > response.total_pages) {
-        nextPage = response.total_pages
-      }
-      // Si la página es menor que 1, se queda en la primera página
-      // Yy si es mayor que el total de páginas, se queda en la última
-      let previousPage = page - 1
-      if (previousPage < 1) {
-        previousPage = 1
-      } else if (previousPage > response.total_pages) {
-        previousPage = response.total_pages
-      }
+      // Construimos las URLs de las páginas siguiente y anterior
+      /*
+      En este código, Math.min(page + 1, Number(response.total_pages)) devolverá el menor de los dos valores,
+      lo que garantiza que nextPage no sea mayor que response.total_pages. De manera similar,
+      Math.max(1, Math.min(page - 1, Number(response.total_pages))) garantizará que previousPage
+      no sea menor que 1 ni mayor que response.total_pages.
 
-      // La respuesta que se envía al cliente
+       */
+
+      const nextPage = Math.min(page + 1, Number(response.total_pages))
+      const previousPage = Math.max(
+        1,
+        Math.min(page - 1, Number(response.total_pages)),
+      )
+
       return {
-        next_page: `${host}${path}?page=${nextPage}&pageSize=${pageSize}&filter=${filter}&order=${order}&search=${search}`,
-        previous_page: `${host}${path}?page=${previousPage}&pageSize=${pageSize}&filter=${filter}&order=${order}&search=${search}`,
         ...response,
+        next_page: `${host}${path}?page=${nextPage}&pageSize=${pageSize}&filter=${filter}&order=${order}&search=${search}`,
+        prev_page: `${host}${path}?page=${previousPage}&pageSize=${pageSize}&filter=${filter}&order=${order}&search=${search}`,
       }
     }
 

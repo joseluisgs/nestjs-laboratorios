@@ -44,12 +44,25 @@ export class CountriesLanguagesService {
         $options: 'i', // para que no distinga entre mayúsculas y minúsculas
       },
     }
+    // Para personalizar la respuesta
+    const customLabels = {
+      docs: 'countries_languages',
+      totalDocs: 'total',
+      limit: 'page_size',
+      totalPages: 'total_pages',
+      pagingCounter: false,
+      hasPrevPage: false,
+      hasNextPage: false,
+      prevPage: 'prev_page',
+      nextPage: 'next_page',
+    }
     // Aquí iría la query de ordenación y paginación
     const options = {
       page,
       limit: pageSize,
       sort: { [filter]: order },
       collection: 'es_ES', // para que use la configuración de idioma de España
+      customLabels,
     }
     // lanzamos la operación de búsqueda y paginación
     // si no hay filtro, query será un objeto vacío, y no puede ser Percentage
