@@ -37,6 +37,9 @@ Proyectos de ejemplo y explicaciones de algunos conceptos de Nest.js
       - [Paginación con MongoDB](#paginación-con-mongodb)
   - [Variables de entorno](#variables-de-entorno)
   - [Subida de ficheros](#subida-de-ficheros)
+    - [Trabajando con Multuex](#trabajando-con-multuex)
+  - [Testing](#testing)
+    - [Test unitarios de servicios](#test-unitarios-de-servicios)
     - [Test unitarios de controladores](#test-unitarios-de-controladores)
     - [Testing E2E](#testing-e2e)
     - [Testing Coverage](#testing-coverage)
@@ -1145,6 +1148,8 @@ export class AppModule {}
 ```
 
 ## Subida de ficheros
+
+### Trabajando con Multuex
 Nest.js permite trabajar con [ficheros](https://docs.nestjs.com/techniques/file-upload) gracias al módulo de multer que viene en express. Lo primero que debemos hacer es instalar los tipos para TypeScript pues ya viene multer instalado, solo necesitamos eso.
 ```bash
 $ npm i -D @types/multer
@@ -1284,6 +1289,14 @@ También podemos pasarele parámetros procesando el body de una petición
     }
   }
 ```	
+
+### Trabajando con Sharp
+
+Sharp es una librería que nos permite trabajar con imágenes, por ejemplo, para redimensionarlas, aplicar efectos, etc. Para ello debemos instalarla como dependencia
+```bash
+ npm i sharp
+ npm i -D @types/sharp
+ ```  
 
 ## Testing
 Para hacer el testing con [Nest.js](https://docs.nestjs.com/fundamentals/testing) haremos uso de [Jest](https://jestjs.io/es-ES/docs/getting-started) y [Supertest](https://github.com/ladjs/supertest).
