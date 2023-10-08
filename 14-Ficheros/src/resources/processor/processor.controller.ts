@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  InternalServerErrorException,
   Logger,
   Post,
   UploadedFile,
@@ -134,6 +135,35 @@ export class ProcessorController {
       mimetype: image.mimetype,
       destination: image.destination,
       info: res,
+    }
+  }
+
+  @Post('process')
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          const fileName = uuidv4() // usamos uuid para generar un nombre único para el archivo
+          const fileExt = extname(file.originalname) // extraemos la extensión del archivo
+          cb(null, `${fileName}${fileExt}`) // llamamos al callback con el nombre del archivo
+        },
+      }),
+    }),
+  ) // 'file' es el nombre del campo en el formulario
+  async processImage(
+    @UploadedFile() image: Express.Multer.File,
+    @Body() body: { properties: any }, // Cuidado con el tipo de body, es ANY!!
+  ) {
+    // Obtenemos las propiedades de la imagen
+    const imageProperties = JSON.parse(body.properties)
+    this.logger.log(`Subiendo archivo:  ${image}`)
+    this.logger.log(`Body:  ${imageProperties}`)
+    try {
+      return await this.processorService.processImage(image, imageProperties)
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException(error)
     }
   }
 }

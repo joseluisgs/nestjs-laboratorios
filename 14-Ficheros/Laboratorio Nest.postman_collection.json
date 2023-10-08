@@ -2112,7 +2112,7 @@
 					"name": "Sharp",
 					"item": [
 						{
-							"name": "PORCESS FILE Multex",
+							"name": "PROCESS FILE Sharp",
 							"request": {
 								"method": "POST",
 								"header": [],
@@ -2126,7 +2126,7 @@
 										},
 										{
 											"key": "properties",
-											"value": "{\"name\": \"Mi nombre\"}",
+											"value": "{\"cropData\": {\"left\":500, \"top\": 500, \"height\": 500, \"width\": 500}}",
 											"type": "text"
 										}
 									]
@@ -2141,6 +2141,175 @@
 										"v1",
 										"processor",
 										"process-image"
+									],
+									"query": [
+										{
+											"key": "file",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "METADATA FILE Sharp",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/14-Ficheros/logo-small.svg"
+										},
+										{
+											"key": "properties",
+											"value": "{\"cropData\": {\"left\":500, \"top\": 500, \"height\": 500, \"width\": 500}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:3000/v1/processor/metadata",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"processor",
+										"metadata"
+									],
+									"query": [
+										{
+											"key": "file",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "STATS FILE Sharp",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/14-Ficheros/logo-small.svg"
+										},
+										{
+											"key": "properties",
+											"value": "{\"cropData\": {\"left\":500, \"top\": 500, \"height\": 500, \"width\": 500}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:3000/v1/processor/stats",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"processor",
+										"stats"
+									],
+									"query": [
+										{
+											"key": "file",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "STORE FILE Sharp",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/14-Ficheros/logo-small.svg"
+										},
+										{
+											"key": "properties",
+											"value": "{\"cropData\": {\"left\":500, \"top\": 500, \"height\": 500, \"width\": 500}}",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:3000/v1/processor/store",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"processor",
+										"store"
+									],
+									"query": [
+										{
+											"key": "file",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PROCESS IMAGE Sharp",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/14-Ficheros/logo-small.svg"
+										},
+										{
+											"key": "properties",
+											"value": "{\"convertProperties\": {\"format\": \"png\"}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:3000/v1/processor/process",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"processor",
+										"process"
 									],
 									"query": [
 										{
