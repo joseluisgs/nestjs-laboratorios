@@ -33,15 +33,15 @@ export class ProcessorController {
   ) // 'file' es el nombre del campo en el formulario
   processFile(
     @UploadedFile() image: Express.Multer.File,
-    @Body() body: { properties: any },
+    // @Body() body: { properties: any },
   ) {
     this.logger.log(`Subiendo archivo:  ${image}`)
-    this.logger.log(`Body:  ${JSON.stringify(body.properties)}`)
+    // this.logger.log(`Body:  ${JSON.stringify(body.properties)}`)
     console.log(image)
-    console.log(body)
+    //console.log(body)
 
-    const parsedProperties = JSON.parse(body.properties) // convertimos body a un objeto JSON
-    console.log(parsedProperties)
+    //const parsedProperties = JSON.parse(body.properties) // convertimos body a un objeto JSON
+    //console.log(parsedProperties)
 
     return {
       originalname: image.originalname,
@@ -68,7 +68,7 @@ export class ProcessorController {
   ) // 'file' es el nombre del campo en el formulario
   async getMetadataFile(
     @UploadedFile() image: Express.Multer.File,
-    @Body() body: { properties: any },
+    // @Body() body: { properties: any },
   ) {
     this.logger.log(`Subiendo archivo:  ${JSON.stringify(image)}`)
     // this.logger.log(`Body:  ${JSON.stringify(body.properties)}`)
@@ -118,6 +118,22 @@ export class ProcessorController {
       destination: image.destination,
       path: image.path,
       stats: await this.processorService.getStats(image),
+    }
+  }
+
+  @Post('store')
+  @UseInterceptors(FileInterceptor('image')) // 'file' es el nombre del campo en el formulario
+  async storeImage(@UploadedFile() image: Express.Multer.File) {
+    // this.logger.log(`Subiendo archivo:  ${JSON.stringify(image)}`)
+    // Salvar imagen con sharo
+    const res = await this.processorService.storeImage(image)
+    return {
+      originalname: image.originalname,
+      filename: image.filename,
+      size: image.size,
+      mimetype: image.mimetype,
+      destination: image.destination,
+      info: res,
     }
   }
 }

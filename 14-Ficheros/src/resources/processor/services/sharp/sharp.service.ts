@@ -35,4 +35,16 @@ export class SharpService {
       throw new InternalServerErrorException(error.message)
     }
   }
+
+  async storeImage(imageBuffer: Buffer, path: string, imageName: string) {
+    try {
+      this.logger.debug(`Guardando imagen en ${path}`)
+      return await this.imageProcessor(imageBuffer).toFile(
+        `${path}/${imageName}`,
+      )
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException(error.message)
+    }
+  }
 }
