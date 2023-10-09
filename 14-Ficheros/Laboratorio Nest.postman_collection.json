@@ -2281,7 +2281,7 @@
 							"response": []
 						},
 						{
-							"name": "PROCESS IMAGE Sharp",
+							"name": "FORMAT IMAGE Sharp",
 							"request": {
 								"method": "POST",
 								"header": [],
@@ -2296,6 +2296,132 @@
 										{
 											"key": "properties",
 											"value": "{\"convertProperties\": {\"format\": \"png\"}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:3000/v1/processor/process",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"processor",
+										"process"
+									],
+									"query": [
+										{
+											"key": "file",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "RESIZE IMAGE Sharp",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/14-Ficheros/logo-small.svg"
+										},
+										{
+											"key": "properties",
+											"value": "{\n    \"resizeProperties\": {\n        \"width\": 100,\n        \"height\": 100\n    }\n}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:3000/v1/processor/process",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"processor",
+										"process"
+									],
+									"query": [
+										{
+											"key": "file",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CROP IMAGE Sharp",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/14-Ficheros/logo-small.svg"
+										},
+										{
+											"key": "properties",
+											"value": "{\n    \"cropProperties\": {\n        \"left\": 0,\n        \"top\": 0,\n        \"width\": 100,\n        \"height\": 100\n    }\n}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:3000/v1/processor/process",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"processor",
+										"process"
+									],
+									"query": [
+										{
+											"key": "file",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ROTATE IMAGE Sharp",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/14-Ficheros/logo-small.svg"
+										},
+										{
+											"key": "properties",
+											"value": "{\n    \"rotateProperties\": {\n        \"angle\": 70\n    }\n}",
 											"type": "text"
 										}
 									]

@@ -152,4 +152,21 @@ export class SharpService {
       throw new InternalServerErrorException(error.message)
     }
   }
+
+  async rotateImage(
+    imageBuffer: Buffer,
+    rotateProperties: { angle?: number; options?: sharp.RotateOptions },
+  ) {
+    try {
+      this.logger.debug(
+        `Rotando imagen con propiedades ${JSON.stringify(rotateProperties)}`,
+      )
+      return await this.imageProcessor(imageBuffer)
+        .rotate(rotateProperties.angle, rotateProperties.options)
+        .toBuffer()
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException(error.message)
+    }
+  }
 }
