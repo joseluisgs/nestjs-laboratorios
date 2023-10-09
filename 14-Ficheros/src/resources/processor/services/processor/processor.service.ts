@@ -166,4 +166,25 @@ export class ProcessorService {
       `${imageName}.${format}`,
     )
   }
+
+  async composeImages(
+    image1: Express.Multer.File,
+    image2: Express.Multer.File,
+  ) {
+    /*this.logger.debug(
+      `Llamando a composeImages con ${JSON.stringify(
+        image1,
+      )} y ${JSON.stringify(image2)}`,
+    )*/
+    const imageBuffer = await this.sharpService.composeImages(
+      image1.buffer,
+      image2.buffer,
+    )
+    const { format } = await this.sharpService.getMetadata(imageBuffer)
+    return await this.sharpService.storeImage(
+      imageBuffer,
+      PROCESSED_IMAGE_PATH,
+      `composed-${uuidv4()}.${format}`,
+    )
+  }
 }

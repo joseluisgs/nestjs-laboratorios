@@ -5,10 +5,14 @@ import {
   Logger,
   Post,
   UploadedFile,
+  UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common'
 import { ProcessorService } from './services/processor/processor.service'
-import { FileInterceptor } from '@nestjs/platform-express'
+import {
+  FileFieldsInterceptor,
+  FileInterceptor,
+} from '@nestjs/platform-express'
 import { diskStorage } from 'multer'
 import { v4 as uuidv4 } from 'uuid'
 import { extname } from 'path'
@@ -171,7 +175,39 @@ export class ProcessorController {
       }
     } catch (error) {
       this.logger.error(error)
-      throw new InternalServerErrorException(error)
+      throw new InternalServerErrorException(error.message)
+    }
+  }
+
+  @Post('compose')
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'image1', maxCount: 1 },
+      { name: 'image2', maxCount: 1 },
+    ]),
+  ) // 'file' es el nombre del campo en el formulario
+  async composeImage(
+    @UploadedFiles()
+    files: {
+      image1?: Express.Multer.File
+      image2?: Express.Multer.File
+    },
+  ) {
+    // this.logger.log(`Subiendo archivo:  ${JSON.stringify(files)}`)
+    const { image1, image2 } = files
+    try {
+      const res = await this.processorService.composeImages(
+        image1[0],
+        image2[0],
+      )
+      return {
+        image1: image1.filename,
+        image2: image2.filename,
+        ...res,
+      }
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException(error.message)
     }
   }
 }

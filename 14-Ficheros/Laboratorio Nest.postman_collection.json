@@ -2615,6 +2615,41 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "COMPOSE Sharp",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image1",
+											"type": "file",
+											"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/14-Ficheros/Typescript_logo_2020.svg.png"
+										},
+										{
+											"key": "image2",
+											"type": "file",
+											"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/14-Ficheros/logo-small.svg"
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:3000/v1/processor/compose",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"processor",
+										"compose"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}

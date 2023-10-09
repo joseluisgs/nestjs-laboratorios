@@ -276,4 +276,22 @@ export class SharpService {
       throw new InternalServerErrorException(error.message)
     }
   }
+
+  async composeImages(image1Buffer: Buffer, image2Buffer: Buffer) {
+    try {
+      /*this.logger.debug(
+        `Componiendo imagen con ${JSON.stringify(
+          image1Buffer,
+        )} y ${JSON.stringify(image2Buffer)}`,
+      )*/
+      return await this.imageProcessor(image1Buffer)
+        .composite([
+          { input: image2Buffer, top: 0, left: 0, gravity: 'centre' },
+        ])
+        .toBuffer()
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException(error.message)
+    }
+  }
 }
