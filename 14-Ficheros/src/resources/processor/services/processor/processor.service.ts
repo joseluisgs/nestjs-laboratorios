@@ -109,6 +109,18 @@ export class ProcessorService {
       )
     }
 
+    // Para invertir una imagen verticalmente
+    if (imageProperties.verticalFlip) {
+      this.logger.debug(`Llamando a verticalFlipImage`)
+      imageBuffer = await this.sharpService.verticalFlipImage(imageBuffer)
+    }
+
+    // Para invertir una imagen horizontalmente
+    if (imageProperties.horizontalFlip) {
+      this.logger.debug(`Llamando a horizontalFlipImage`)
+      imageBuffer = await this.sharpService.horizontalFlipImage(imageBuffer)
+    }
+
     // Guardamos la imagen en disco y devolvemos el nombre de la imagen
     const { format } = await this.sharpService.getMetadata(imageBuffer)
     return await this.sharpService.storeImage(

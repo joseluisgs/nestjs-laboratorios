@@ -2447,6 +2447,48 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "FLIP IMAGE Sharp",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/joseluisgs/Projects/nestjs-laboratorios/14-Ficheros/logo-small.svg"
+										},
+										{
+											"key": "properties",
+											"value": "{\n    \"verticalFlip\": true,\n    \"horizontalFlip\": true\n}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:3000/v1/processor/process",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"v1",
+										"processor",
+										"process"
+									],
+									"query": [
+										{
+											"key": "file",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}

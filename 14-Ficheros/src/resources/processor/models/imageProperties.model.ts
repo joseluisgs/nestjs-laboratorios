@@ -40,4 +40,6 @@ export interface ImageProperties {
     angle?: number
     options?: sharp.RotateOptions
   }
+  horizontalFlip: boolean
+  verticalFlip: boolean
 }

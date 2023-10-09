@@ -169,4 +169,24 @@ export class SharpService {
       throw new InternalServerErrorException(error.message)
     }
   }
+
+  async verticalFlipImage(imageBuffer: Buffer) {
+    try {
+      this.logger.debug(`Volteando imagen verticalmente`)
+      return await this.imageProcessor(imageBuffer).flip().toBuffer()
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException(error.message)
+    }
+  }
+
+  async horizontalFlipImage(imageBuffer: Buffer) {
+    try {
+      this.logger.debug(`Volteando imagen horizontalmente`)
+      return await this.imageProcessor(imageBuffer).flop().toBuffer()
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException(error.message)
+    }
+  }
 }
