@@ -245,4 +245,35 @@ export class SharpService {
       throw new InternalServerErrorException(error.message)
     }
   }
+
+  async trimImage(imageBuffer: Buffer, trimLevel: number) {
+    try {
+      this.logger.debug(
+        `Recortando imagen con propiedades ${JSON.stringify(trimLevel)}`,
+      )
+      return await this.imageProcessor(imageBuffer).trim(trimLevel).toBuffer()
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException(error.message)
+    }
+  }
+
+  async setTransparencyBackground(
+    imageBuffer: Buffer,
+    transparencyBackground: sharp.Color,
+  ) {
+    try {
+      this.logger.debug(
+        `Aplanando imagen con propiedades ${JSON.stringify(
+          transparencyBackground,
+        )}`,
+      )
+      return await this.imageProcessor(imageBuffer)
+        .flatten({ background: transparencyBackground })
+        .toBuffer()
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException(error.message)
+    }
+  }
 }

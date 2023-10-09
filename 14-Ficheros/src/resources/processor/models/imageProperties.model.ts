@@ -1,7 +1,7 @@
 import * as sharp from 'sharp'
 
 export interface ImageProperties {
-  convertProperties: {
+  convertProperties?: {
     format: keyof sharp.FormatEnum
     options?:
       | sharp.OutputOptions
@@ -15,7 +15,7 @@ export interface ImageProperties {
       | sharp.Jp2Options
       | sharp.TiffOptions
   }
-  resizeProperties: {
+  resizeProperties?: {
     width?: number
     height?: number
     options?: {
@@ -30,19 +30,19 @@ export interface ImageProperties {
       fastShrinkOnLoad?: boolean | undefined
     }
   }
-  cropProperties: {
+  cropProperties?: {
     left: number
     top: number
     width: number
     height: number
   }
-  rotateProperties: {
+  rotateProperties?: {
     angle?: number
     options?: sharp.RotateOptions
   }
-  horizontalFlip: boolean
-  verticalFlip: boolean
-  effectsProperties: {
+  horizontalFlip?: boolean
+  verticalFlip?: boolean
+  effectsProperties?: {
     treshold?: number
     tresholdGrayscale?: boolean
     median?: number
@@ -56,4 +56,6 @@ export interface ImageProperties {
     tint?: sharp.Color
     sharpness?: number
   }
+  trimLevel?: number
+  transparencyBackground?: sharp.Color
 }

@@ -134,6 +134,30 @@ export class ProcessorService {
       )
     }
 
+    // Si tiene trim
+    if (imageProperties.trimLevel) {
+      this.logger.debug(
+        `Llamando a trimImage con ${JSON.stringify(imageProperties.trimLevel)}`,
+      )
+      imageBuffer = await this.sharpService.trimImage(
+        imageBuffer,
+        imageProperties.trimLevel,
+      )
+    }
+
+    // si tiene transparencyBackground
+    if (imageProperties.transparencyBackground) {
+      this.logger.debug(
+        `Llamando a applyTransparencyImage con ${JSON.stringify(
+          imageProperties.transparencyBackground,
+        )}`,
+      )
+      imageBuffer = await this.sharpService.setTransparencyBackground(
+        imageBuffer,
+        imageProperties.transparencyBackground,
+      )
+    }
+
     // Guardamos la imagen en disco y devolvemos el nombre de la imagen
     const { format } = await this.sharpService.getMetadata(imageBuffer)
     return await this.sharpService.storeImage(
