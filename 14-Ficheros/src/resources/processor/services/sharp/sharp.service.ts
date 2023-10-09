@@ -189,4 +189,60 @@ export class SharpService {
       throw new InternalServerErrorException(error.message)
     }
   }
+
+  async effectsImage(
+    imageBuffer: Buffer,
+    effectsProperties: {
+      treshold?: number
+      tresholdGrayscale?: boolean
+      median?: number
+      blur?: number
+      negate?: boolean
+      grayscale?: boolean
+      brightness?: number
+      saturation?: number
+      hue?: number
+      lightness?: number
+      tint?: sharp.Color
+      sharpness?: number
+    },
+  ) {
+    try {
+      this.logger.debug(
+        `Aplicando efectos a la imagen con propiedades ${JSON.stringify(
+          effectsProperties,
+        )}`,
+      )
+
+      if (effectsProperties.treshold) {
+        imageBuffer = await this.imageProcessor(imageBuffer)
+          .threshold(effectsProperties.treshold || 128, {
+            grayscale: effectsProperties.tresholdGrayscale || false,
+          })
+          .toBuffer()
+      }
+
+      if (effectsProperties.tint) {
+        imageBuffer = await this.imageProcessor(imageBuffer)
+          .tint(effectsProperties.tint)
+          .toBuffer()
+      }
+
+      return await this.imageProcessor(imageBuffer)
+        .median(effectsProperties.median || 3)
+        .blur(effectsProperties.blur || 0.3)
+        .negate(effectsProperties.negate || false)
+        .grayscale(effectsProperties.grayscale || false)
+        .modulate({
+          brightness: effectsProperties.brightness || 1,
+          saturation: effectsProperties.saturation || 1,
+          hue: effectsProperties.hue || 0,
+          lightness: effectsProperties.lightness || 1,
+        })
+        .toBuffer()
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException(error.message)
+    }
+  }
 }

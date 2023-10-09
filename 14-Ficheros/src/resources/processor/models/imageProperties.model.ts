@@ -42,4 +42,18 @@ export interface ImageProperties {
   }
   horizontalFlip: boolean
   verticalFlip: boolean
+  effectsProperties: {
+    treshold?: number
+    tresholdGrayscale?: boolean
+    median?: number
+    blur?: number
+    negate?: boolean
+    grayscale?: boolean
+    brightness?: number
+    saturation?: number
+    hue?: number
+    lightness?: number
+    tint?: sharp.Color
+    sharpness?: number
+  }
 }

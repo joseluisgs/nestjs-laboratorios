@@ -121,6 +121,19 @@ export class ProcessorService {
       imageBuffer = await this.sharpService.horizontalFlipImage(imageBuffer)
     }
 
+    // si tienes efectos
+    if (imageProperties.effectsProperties) {
+      this.logger.debug(
+        `Llamando a applyEffectsImage con ${JSON.stringify(
+          imageProperties.effectsProperties,
+        )}`,
+      )
+      imageBuffer = await this.sharpService.effectsImage(
+        imageBuffer,
+        imageProperties.effectsProperties,
+      )
+    }
+
     // Guardamos la imagen en disco y devolvemos el nombre de la imagen
     const { format } = await this.sharpService.getMetadata(imageBuffer)
     return await this.sharpService.storeImage(
