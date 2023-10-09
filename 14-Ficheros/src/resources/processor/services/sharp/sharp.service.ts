@@ -130,4 +130,26 @@ export class SharpService {
       throw new InternalServerErrorException(error.message)
     }
   }
+
+  async cropImage(
+    imageBuffer: Buffer,
+    cropProperties: {
+      left: number
+      top: number
+      width: number
+      height: number
+    },
+  ) {
+    try {
+      this.logger.debug(
+        `Recortando imagen con propiedades ${JSON.stringify(cropProperties)}`,
+      )
+      return await this.imageProcessor(imageBuffer)
+        .extract(cropProperties)
+        .toBuffer()
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException(error.message)
+    }
+  }
 }

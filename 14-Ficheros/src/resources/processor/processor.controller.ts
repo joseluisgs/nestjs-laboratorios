@@ -12,6 +12,7 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { diskStorage } from 'multer'
 import { v4 as uuidv4 } from 'uuid'
 import { extname } from 'path'
+import { UPLOADS_IMAGE_PATH } from '../constant/path.constants'
 
 @Controller('processor')
 export class ProcessorController {
@@ -23,7 +24,7 @@ export class ProcessorController {
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
-        destination: './uploads',
+        destination: UPLOADS_IMAGE_PATH,
         filename: (req, file, cb) => {
           const fileName = uuidv4() // usamos uuid para generar un nombre único para el archivo
           const fileExt = extname(file.originalname) // extraemos la extensión del archivo
@@ -58,7 +59,7 @@ export class ProcessorController {
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
-        destination: './uploads',
+        destination: UPLOADS_IMAGE_PATH,
         filename: (req, file, cb) => {
           const fileName = uuidv4() // usamos uuid para generar un nombre único para el archivo
           const fileExt = extname(file.originalname) // extraemos la extensión del archivo
@@ -92,7 +93,7 @@ export class ProcessorController {
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
-        destination: './uploads',
+        destination: UPLOADS_IMAGE_PATH,
         filename: (req, file, cb) => {
           const fileName = uuidv4() // usamos uuid para generar un nombre único para el archivo
           const fileExt = extname(file.originalname) // extraemos la extensión del archivo
@@ -103,7 +104,7 @@ export class ProcessorController {
   ) // 'file' es el nombre del campo en el formulario
   async getStatsFile(
     @UploadedFile() image: Express.Multer.File,
-    @Body() body: { properties: any },
+    //@Body() body: { properties: any },
   ) {
     this.logger.log(`Subiendo archivo:  ${JSON.stringify(image)}`)
     // this.logger.log(`Body:  ${JSON.stringify(body.properties)}`)
@@ -142,7 +143,7 @@ export class ProcessorController {
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
-        destination: './uploads',
+        destination: UPLOADS_IMAGE_PATH,
         filename: (req, file, cb) => {
           const fileName = uuidv4() // usamos uuid para generar un nombre único para el archivo
           const fileExt = extname(file.originalname) // extraemos la extensión del archivo
@@ -165,7 +166,7 @@ export class ProcessorController {
         imageProperties,
       )
       return {
-        filename: image.filename,
+        image: image.filename,
         ...res,
       }
     } catch (error) {

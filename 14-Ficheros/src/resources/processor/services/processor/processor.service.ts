@@ -1,15 +1,32 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { SharpService } from '../sharp/sharp.service'
-import { extname } from 'path'
+import { basename, extname } from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import { ImageProperties } from '../../models/imageProperties.model'
+import {
+  PROCESSED_IMAGE_PATH,
+  UPLOADS_IMAGE_PATH,
+} from '../../../constant/path.constants'
+import * as fs from 'fs'
 
 @Injectable()
 export class ProcessorService {
   private readonly logger = new Logger(ProcessorService.name)
 
   // Inyectamos el servicio SharpService
-  constructor(private readonly sharpService: SharpService) {}
+  constructor(private readonly sharpService: SharpService) {
+    this.logger.log(
+      'Creando instancia de ProcessorController y creando las carpetas necesarias',
+    )
+    if (!fs.existsSync(UPLOADS_IMAGE_PATH)) {
+      this.logger.log(`Creando carpeta ${UPLOADS_IMAGE_PATH}`)
+      fs.mkdirSync(UPLOADS_IMAGE_PATH)
+    }
+    if (!fs.existsSync(PROCESSED_IMAGE_PATH)) {
+      this.logger.log(`Creando carpeta ${PROCESSED_IMAGE_PATH}`)
+      fs.mkdirSync(PROCESSED_IMAGE_PATH)
+    }
+  }
 
   async getMetadata(image: Express.Multer.File) {
     return await this.sharpService.getMetadata(image.buffer)
@@ -22,7 +39,7 @@ export class ProcessorService {
   async storeImage(image: Express.Multer.File) {
     return await this.sharpService.storeImage(
       image.buffer,
-      './uploads',
+      PROCESSED_IMAGE_PATH,
       uuidv4() + extname(image.originalname),
     )
   }
@@ -37,7 +54,7 @@ export class ProcessorService {
 
     // Obtenemos la ruta y el nombre de la imagen
     const imagePath = image.path
-    const imageName = image.filename.split('.')[0] // Obtenemos el nombre de la imagen sin la extensión
+    const imageName = basename(imagePath, extname(image.filename))
     let imageBuffer = await this.sharpService.getImageBuffer(imagePath) // Obtenemos el buffer de la imagen
 
     // Para cambiar el formato de la imagen
@@ -66,11 +83,24 @@ export class ProcessorService {
       )
     }
 
+    // Para cortar la imagen
+    if (imageProperties.cropProperties) {
+      this.logger.debug(
+        `Llamando a cropImage con ${JSON.stringify(
+          imageProperties.cropProperties,
+        )}`,
+      )
+      imageBuffer = await this.sharpService.cropImage(
+        imageBuffer,
+        imageProperties.cropProperties,
+      )
+    }
+
     // Guardamos la imagen en disco y devolvemos el nombre de la imagen
     const { format } = await this.sharpService.getMetadata(imageBuffer)
     return await this.sharpService.storeImage(
       imageBuffer,
-      './uploads',
+      PROCESSED_IMAGE_PATH,
       `${imageName}.${format}`,
     )
   }

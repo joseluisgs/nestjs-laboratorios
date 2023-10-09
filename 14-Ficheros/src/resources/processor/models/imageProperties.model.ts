@@ -30,4 +30,10 @@ export interface ImageProperties {
       fastShrinkOnLoad?: boolean | undefined
     }
   }
+  cropProperties: {
+    left: number
+    top: number
+    width: number
+    height: number
+  }
 }
