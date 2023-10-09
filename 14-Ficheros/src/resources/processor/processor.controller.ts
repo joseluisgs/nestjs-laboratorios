@@ -160,7 +160,14 @@ export class ProcessorController {
     this.logger.log(`Subiendo archivo:  ${image}`)
     this.logger.log(`Body:  ${imageProperties}`)
     try {
-      return await this.processorService.processImage(image, imageProperties)
+      const res = await this.processorService.processImage(
+        image,
+        imageProperties,
+      )
+      return {
+        filename: image.filename,
+        ...res,
+      }
     } catch (error) {
       this.logger.error(error)
       throw new InternalServerErrorException(error)

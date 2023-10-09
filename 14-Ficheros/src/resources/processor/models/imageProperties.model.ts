@@ -15,4 +15,19 @@ export interface ImageProperties {
       | sharp.Jp2Options
       | sharp.TiffOptions
   }
+  resizeProperties: {
+    width?: number
+    height?: number
+    options?: {
+      width?: number | undefined
+      height?: number | undefined
+      fit?: keyof sharp.FitEnum | undefined
+      position?: number | string | undefined
+      background?: sharp.Color | undefined
+      kernel?: keyof sharp.KernelEnum | undefined
+      withoutEnlargement?: boolean | undefined
+      withoutReduction?: boolean | undefined
+      fastShrinkOnLoad?: boolean | undefined
+    }
+  }
 }

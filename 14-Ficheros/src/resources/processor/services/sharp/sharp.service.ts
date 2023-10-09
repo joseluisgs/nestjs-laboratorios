@@ -48,7 +48,7 @@ export class SharpService {
     }
   }
 
-  convertFormatImage(
+  async convertFormatImage(
     imagePath: string,
     convertProperties: {
       format: keyof sharp.FormatEnum
@@ -65,9 +65,6 @@ export class SharpService {
         | sharp.TiffOptions
     },
   ) {
-    this.logger.debug(
-      `Convirtiendo imagen a formato ${convertProperties.format}`,
-    )
     try {
       if (convertProperties.options) {
         this.logger.debug(
@@ -75,16 +72,59 @@ export class SharpService {
             convertProperties.format
           } con opciones ${JSON.stringify(convertProperties.options)}`,
         )
-        return this.imageProcessor(imagePath)
+        return await this.imageProcessor(imagePath)
           .toFormat(convertProperties.format, convertProperties.options)
           .toBuffer()
       }
       this.logger.debug(
         `Convirtiendo imagen a formato ${convertProperties.format}`,
       )
-      return this.imageProcessor(imagePath)
+      return await this.imageProcessor(imagePath)
         .toFormat(convertProperties.format)
         .toBuffer()
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException(error.message)
+    }
+  }
+
+  async resizeImage(
+    imageBuffer: Buffer,
+    resizeProperties: {
+      width?: number
+      height?: number
+      options?: {
+        width?: number | undefined
+        height?: number | undefined
+        fit?: keyof sharp.FitEnum | undefined
+        position?: number | string | undefined
+        background?: sharp.Color | undefined
+        kernel?: keyof sharp.KernelEnum | undefined
+        withoutEnlargement?: boolean | undefined
+        withoutReduction?: boolean | undefined
+        fastShrinkOnLoad?: boolean | undefined
+      }
+    },
+  ) {
+    try {
+      this.logger.debug(
+        `Redimensionando imagen con propiedades ${JSON.stringify(
+          resizeProperties,
+        )}`,
+      )
+      return await this.imageProcessor(imageBuffer)
+        .resize(resizeProperties.width, resizeProperties.height)
+        .toBuffer()
+    } catch (error) {
+      this.logger.error(error)
+      throw new InternalServerErrorException(error.message)
+    }
+  }
+
+  async getImageBuffer(imagePath: string) {
+    try {
+      this.logger.debug(`Obteniendo buffer de la imagen ${imagePath}`)
+      return await this.imageProcessor(imagePath).toBuffer()
     } catch (error) {
       this.logger.error(error)
       throw new InternalServerErrorException(error.message)

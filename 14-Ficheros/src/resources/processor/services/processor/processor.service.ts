@@ -34,11 +34,15 @@ export class ProcessorService {
     this.logger.log(
       `Procesando imagen: ${image.path} con ${JSON.stringify(imageProperties)}`,
     )
+
+    // Obtenemos la ruta y el nombre de la imagen
     const imagePath = image.path
     const imageName = image.filename.split('.')[0] // Obtenemos el nombre de la imagen sin la extensión
-    let imageBuffer = null
+    let imageBuffer = await this.sharpService.getImageBuffer(imagePath) // Obtenemos el buffer de la imagen
+
+    // Para cambiar el formato de la imagen
     if (imageProperties.convertProperties) {
-      this.logger.log(
+      this.logger.debug(
         `Llamando a convertFormatImage con ${JSON.stringify(
           imageProperties.convertProperties,
         )}`,
@@ -47,13 +51,27 @@ export class ProcessorService {
         imagePath,
         imageProperties.convertProperties,
       )
-      // Guardamos la imagen en disco
-      const { format } = await this.sharpService.getMetadata(imageBuffer)
-      return await this.sharpService.storeImage(
+    }
+
+    // Para cambiar el tamaño de la imagen
+    if (imageProperties.resizeProperties) {
+      this.logger.debug(
+        `Llamando a resizeImage con ${JSON.stringify(
+          imageProperties.resizeProperties,
+        )}`,
+      )
+      imageBuffer = await this.sharpService.resizeImage(
         imageBuffer,
-        './uploads',
-        `${imageName}.${format}`,
+        imageProperties.resizeProperties,
       )
     }
+
+    // Guardamos la imagen en disco y devolvemos el nombre de la imagen
+    const { format } = await this.sharpService.getMetadata(imageBuffer)
+    return await this.sharpService.storeImage(
+      imageBuffer,
+      './uploads',
+      `${imageName}.${format}`,
+    )
   }
 }
